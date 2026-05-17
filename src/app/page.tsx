@@ -4,16 +4,24 @@ import UniversityGrid from '@/components/sections/UniversityGrid'
 import ScrollRevealSection from '@/components/sections/ScrollRevealSection'
 import Testimonials from '@/components/sections/Testimonials'
 import HowWeWork from '@/components/sections/HowWeWork'
+import CitiesSection from '@/components/sections/CitiesSection'
+import NewsSlider from '@/components/sections/NewsSlider'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
-    <main>
-      <Header />
-      <Hero />
-      <UniversityGrid />
-      <ScrollRevealSection />
-      <Testimonials />
-      <HowWeWork />
-    </main>
+    <>
+      <main>
+        <Header />
+        <Hero />
+        <UniversityGrid />
+        <ScrollRevealSection />
+        <Testimonials />
+        <HowWeWork />
+        <CitiesSection />
+        <NewsSlider />
+      </main>
+      <Footer />
+    </>
   )
 }
