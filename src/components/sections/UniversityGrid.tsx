@@ -84,23 +84,22 @@ interface University {
   founded: number
   students: string
   description: string
-  accent: string        // hover rengi
-  logo: React.ReactNode // SVG logo
+  accent: string
 }
 
 const UNIVERSITIES: University[] = [
-  { id: 'harvard',   name: 'Harvard University',           shortName: 'Harvard',   country: 'ABD',        flag: '🇺🇸', ranking: 1,  founded: 1636, students: '23,000', description: 'Dünyanın en prestijli araştırma üniversitesi.',          accent: '#8B0000', logo: logos.harvard   },
-  { id: 'oxford',    name: 'University of Oxford',         shortName: 'Oxford',    country: 'İngiltere',  flag: '🇬🇧', ranking: 2,  founded: 1096, students: '24,000', description: "Avrupa'nın en eski ve en saygın akademik kurumu.",        accent: '#003D7C', logo: logos.oxford    },
-  { id: 'mit',       name: 'MIT',                          shortName: 'MIT',       country: 'ABD',        flag: '🇺🇸', ranking: 3,  founded: 1861, students: '11,000', description: 'Teknoloji ve inovasyon alanında küresel lider.',          accent: '#A31F34', logo: logos.mit       },
-  { id: 'cambridge', name: 'University of Cambridge',      shortName: 'Cambridge', country: 'İngiltere',  flag: '🇬🇧', ranking: 4,  founded: 1209, students: '24,000', description: "Newton ve Darwin'in yetiştiği köklü akademik kurum.",     accent: '#003087', logo: logos.cambridge },
-  { id: 'stanford',  name: 'Stanford University',          shortName: 'Stanford',  country: 'ABD',        flag: '🇺🇸', ranking: 5,  founded: 1885, students: '17,000', description: "Silikon Vadisi'nin kalbindeki inovasyon merkezi.",         accent: '#8C1515', logo: logos.stanford  },
-  { id: 'yale',      name: 'Yale University',              shortName: 'Yale',      country: 'ABD',        flag: '🇺🇸', ranking: 6,  founded: 1701, students: '14,000', description: "Ivy League'nin en köklü liderlik geleneğine sahip kurumu.", accent: '#00356B', logo: logos.yale      },
-  { id: 'columbia',  name: 'Columbia University',          shortName: 'Columbia',  country: 'ABD',        flag: '🇺🇸', ranking: 9,  founded: 1754, students: '34,000', description: "New York'un kalbinde küresel bir araştırma üniversitesi.", accent: '#1D4693', logo: logos.columbia  },
-  { id: 'lse',       name: 'London School of Economics',   shortName: 'LSE',       country: 'İngiltere',  flag: '🇬🇧', ranking: 45, founded: 1895, students: '12,000', description: 'Sosyal bilimlerde küresel düzeyde lider akademik kurum.',  accent: '#B50938', logo: logos.lse       },
-  { id: 'toronto',   name: 'University of Toronto',        shortName: 'Toronto',   country: 'Kanada',     flag: '🇨🇦', ranking: 21, founded: 1827, students: '97,000', description: "Kuzey Amerika'nın önde gelen araştırma üniversitesi.",    accent: '#003D7C', logo: logos.toronto   },
-  { id: 'melbourne', name: 'University of Melbourne',      shortName: 'Melbourne', country: 'Avustralya', flag: '🇦🇺', ranking: 33, founded: 1853, students: '52,000', description: "Avustralya'nın en yüksek itibarli akademik kurumu.",      accent: '#00629B', logo: logos.melbourne },
-  { id: 'nyu',       name: 'New York University',          shortName: 'NYU',       country: 'ABD',        flag: '🇺🇸', ranking: 38, founded: 1831, students: '60,000', description: "New York'ta çok kültürlü ve uluslararası kampüs.",        accent: '#57068C', logo: logos.nyu       },
-  { id: 'amsterdam', name: 'University of Amsterdam',      shortName: 'UvA',       country: 'Hollanda',   flag: '🇳🇱', ranking: 53, founded: 1632, students: '44,000', description: "Avrupa'nın en kozmopolit ve uluslararası kampüsü.",       accent: '#CC0000', logo: logos.amsterdam },
+  { id: 'harvard',   name: 'Harvard University',           shortName: 'Harvard',   country: 'ABD',        flag: '🇺🇸', ranking: 1,  founded: 1636, students: '23,000', description: 'Dünyanın en prestijli araştırma üniversitesi.',          accent: '#8B0000' },
+  { id: 'oxford',    name: 'University of Oxford',         shortName: 'Oxford',    country: 'İngiltere',  flag: '🇬🇧', ranking: 2,  founded: 1096, students: '24,000', description: "Avrupa'nın en eski ve en saygın akademik kurumu.",        accent: '#003D7C' },
+  { id: 'mit',       name: 'MIT',                          shortName: 'MIT',       country: 'ABD',        flag: '🇺🇸', ranking: 3,  founded: 1861, students: '11,000', description: 'Teknoloji ve inovasyon alanında küresel lider.',          accent: '#A31F34' },
+  { id: 'cambridge', name: 'University of Cambridge',      shortName: 'Cambridge', country: 'İngiltere',  flag: '🇬🇧', ranking: 4,  founded: 1209, students: '24,000', description: "Newton ve Darwin'in yetiştiği köklü akademik kurum.",     accent: '#003087' },
+  { id: 'stanford',  name: 'Stanford University',          shortName: 'Stanford',  country: 'ABD',        flag: '🇺🇸', ranking: 5,  founded: 1885, students: '17,000', description: "Silikon Vadisi'nin kalbindeki inovasyon merkezi.",        accent: '#8C1515' },
+  { id: 'yale',      name: 'Yale University',              shortName: 'Yale',      country: 'ABD',        flag: '🇺🇸', ranking: 6,  founded: 1701, students: '14,000', description: "Ivy League'nin en köklü liderlik geleneğine sahip kurumu.", accent: '#00356B' },
+  { id: 'columbia',  name: 'Columbia University',          shortName: 'Columbia',  country: 'ABD',        flag: '🇺🇸', ranking: 9,  founded: 1754, students: '34,000', description: "New York'un kalbinde küresel bir araştırma üniversitesi.", accent: '#1D4693' },
+  { id: 'lse',       name: 'London School of Economics',   shortName: 'LSE',       country: 'İngiltere',  flag: '🇬🇧', ranking: 45, founded: 1895, students: '12,000', description: 'Sosyal bilimlerde küresel düzeyde lider akademik kurum.',  accent: '#B50938' },
+  { id: 'toronto',   name: 'University of Toronto',        shortName: 'Toronto',   country: 'Kanada',     flag: '🇨🇦', ranking: 21, founded: 1827, students: '97,000', description: "Kuzey Amerika'nın önde gelen araştırma üniversitesi.",    accent: '#003D7C' },
+  { id: 'melbourne', name: 'University of Melbourne',      shortName: 'Melbourne', country: 'Avustralya', flag: '🇦🇺', ranking: 33, founded: 1853, students: '52,000', description: "Avustralya'nın en yüksek itibarli akademik kurumu.",      accent: '#00629B' },
+  { id: 'nyu',       name: 'New York University',          shortName: 'NYU',       country: 'ABD',        flag: '🇺🇸', ranking: 38, founded: 1831, students: '60,000', description: "New York'ta çok kültürlü ve uluslararası kampüs.",        accent: '#57068C' },
+  { id: 'amsterdam', name: 'University of Amsterdam',      shortName: 'UvA',       country: 'Hollanda',   flag: '🇳🇱', ranking: 53, founded: 1632, students: '44,000', description: "Avrupa'nın en kozmopolit ve uluslararası kampüsü.",       accent: '#CC0000' },
 ]
 
 const STATS = [

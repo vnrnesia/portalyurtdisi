@@ -13,6 +13,9 @@ import Container from '@/components/ui/Container'
 
 gsap.registerPlugin(ScrollTrigger)
 
+// Height of each sticky label strip (px)
+const LABEL_H = 52
+
 interface Card {
   Icon: React.ElementType
   title: string
@@ -34,7 +37,7 @@ const panels: Panel[] = [
     label: 'Üniversite Seçimi',
     title: ['Hayalindeki', 'Okulu Bul'],
     bg: '#ede9e1',
-    labelColor: '#b06020',
+    labelColor: '#9a5218',
     cards: [
       { Icon: GraduationCap, title: '500+ Üniversite', desc: 'Dünyanın en prestijli okulları tek çatı altında' },
       { Icon: Globe, title: '45+ Ülke', desc: 'Her kıtada eğitim ve kariyer fırsatı' },
@@ -46,7 +49,7 @@ const panels: Panel[] = [
     label: 'Burs & Finansman',
     title: ['Eğitimini', 'Finanse Et'],
     bg: '#e1e7ed',
-    labelColor: '#1d5f8a',
+    labelColor: '#1a5480',
     cards: [
       { Icon: Banknote, title: 'Burs Veritabanı', desc: "1000'den fazla burs fırsatı listesi" },
       { Icon: CalendarClock, title: 'Başvuru Takvimi', desc: 'Son başvuru tarihlerini kaçırma' },
@@ -58,7 +61,7 @@ const panels: Panel[] = [
     label: 'Vize & Hazırlık',
     title: ['Sınırları', 'Aş'],
     bg: '#e1ede5',
-    labelColor: '#1d6b36',
+    labelColor: '#1a5c30',
     cards: [
       { Icon: FileText, title: 'Vize Rehberi', desc: 'Ülkeye özel adım adım vize süreci' },
       { Icon: ListChecks, title: 'Belge Kontrol', desc: 'Eksik evrak bırakmayan hazırlık listesi' },
@@ -69,8 +72,8 @@ const panels: Panel[] = [
     id: '04',
     label: 'Kampüs Hayatı',
     title: ['Yeni Hayatına', 'Başla'],
-    bg: '#ede9e1',
-    labelColor: '#7a5010',
+    bg: '#ede5e1',
+    labelColor: '#7a3a10',
     cards: [
       { Icon: Home, title: 'Konaklama', desc: 'Yurt, apart ve kiralık daire rehberi' },
       { Icon: Layers, title: 'Kampüs Hayatı', desc: 'Kulüpler, etkinlikler ve sosyal ağlar' },
@@ -81,19 +84,19 @@ const panels: Panel[] = [
 
 export default function ScrollRevealSection() {
   const panelRefs     = useRef<(HTMLElement | null)[]>([])
-  const labelRefs     = useRef<(HTMLDivElement | null)[]>([])
   const titleLineRefs = useRef<(HTMLDivElement | null)[]>([])
   const cardRefs      = useRef<(HTMLDivElement | null)[]>([])
 
-  // Match panel dimensions to visible viewport (below sticky header)
+  // Each panel sticks at: headerHeight + i * LABEL_H
+  // Each panel height fills: 100vh - (headerHeight + i * LABEL_H)
   useEffect(() => {
     const updateDimensions = () => {
-      const header = document.querySelector('header')
-      const hh = header?.offsetHeight ?? 116
-      panelRefs.current.forEach(panel => {
+      const hh = document.querySelector('header')?.offsetHeight ?? 116
+      panelRefs.current.forEach((panel, i) => {
         if (!panel) return
-        panel.style.top    = `${hh}px`
-        panel.style.height = `${window.innerHeight - hh}px`
+        const stickyTop = hh + i * LABEL_H
+        panel.style.top    = `${stickyTop}px`
+        panel.style.height = `${window.innerHeight - stickyTop}px`
       })
     }
     updateDimensions()
@@ -102,12 +105,13 @@ export default function ScrollRevealSection() {
   }, [])
 
   useEffect(() => {
+    const hh = document.querySelector('header')?.offsetHeight ?? 116
+
     const ctx = gsap.context(() => {
       panels.forEach((_, i) => {
         const panel = panelRefs.current[i]
         if (!panel) return
 
-        const label      = labelRefs.current[i]
         const titleLines = [0, 1]
           .map(li => titleLineRefs.current[i * 2 + li])
           .filter(Boolean) as HTMLDivElement[]
@@ -115,21 +119,17 @@ export default function ScrollRevealSection() {
           .map(ci => cardRefs.current[i * 3 + ci])
           .filter(Boolean) as HTMLDivElement[]
 
+        // Fire when the panel reaches its sticky position (fully in view)
         gsap.timeline({
           scrollTrigger: {
             trigger: panel,
-            start: 'top 85%',
+            start: `top top+=${hh + i * LABEL_H}`,
             toggleActions: 'play none none none',
           },
         })
-          .fromTo(label,
-            { opacity: 0, y: -10 },
-            { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
-          )
           .fromTo(titleLines,
             { y: '110%' },
-            { y: '0%', duration: 1, ease: 'power4.out', stagger: 0.08 },
-            '-=0.2'
+            { y: '0%', duration: 1, ease: 'power4.out', stagger: 0.08 }
           )
           .fromTo(cards,
             { opacity: 0, y: 28 },
@@ -143,94 +143,85 @@ export default function ScrollRevealSection() {
   }, [])
 
   return (
-    // mt-20 creates the gap between UniversityGrid and this section
     <div className="mt-20 lg:mt-28">
       {panels.map((panel, i) => (
         <section
           key={panel.id}
           ref={el => { panelRefs.current[i] = el }}
-          className="sticky overflow-hidden"
+          className="sticky overflow-hidden flex flex-col"
           style={{
             zIndex: i + 1,
             backgroundColor: panel.bg,
-            top: '116px',
-            height: 'calc(100vh - 116px)',
+            // CSS fallback — JS updates these on mount
+            top: `${116 + i * LABEL_H}px`,
+            height: `calc(100vh - ${116 + i * LABEL_H}px)`,
           }}
         >
-          <Container className="h-full flex flex-col px-8 lg:px-16 pt-10 lg:pt-12 pb-12 lg:pb-14">
-
-            {/* ── Label — top of panel, visible during stacking transitions ── */}
-            <div
-              ref={el => { labelRefs.current[i] = el }}
-              className="text-center shrink-0 mb-auto"
-              style={{ opacity: 0 }}
+          {/* ── Label strip — stacks at top as panels accumulate ── */}
+          <div
+            className="flex items-center justify-center shrink-0 border-b border-black/[0.07]"
+            style={{ height: LABEL_H }}
+          >
+            <span
+              className="text-[11px] font-semibold tracking-[0.4em] uppercase"
+              style={{ color: panel.labelColor }}
             >
-              <span
-                className="text-[11px] font-semibold tracking-[0.4em] uppercase"
-                style={{ color: panel.labelColor }}
-              >
-                {panel.id} · {panel.label}
-              </span>
-            </div>
+              {panel.id} · {panel.label}
+            </span>
+          </div>
 
-            {/* ── Bottom content: two-column grid ── */}
-            <div className="grid grid-cols-1 lg:grid-cols-[58fr_42fr] gap-6 lg:gap-10 shrink-0">
+          {/* ── Main content — pushed to bottom by spacer ── */}
+          <Container className="flex-1 flex flex-col px-8 lg:px-16 pb-10 lg:pb-14 overflow-hidden relative">
 
-              {/* Left: title + cards */}
-              <div className="flex flex-col gap-7">
+            {/* Spacer keeps title/cards at the bottom */}
+            <div className="flex-1" />
 
-                {/* Title */}
-                <h2 className="text-[clamp(3rem,5.5vw,7rem)] font-bold text-gray-900 leading-[0.88] tracking-tight">
-                  {panel.title.map((line, li) => (
-                    <div key={li} className="overflow-hidden">
-                      <div
-                        ref={el => { titleLineRefs.current[i * 2 + li] = el }}
-                        style={{ transform: 'translateY(110%)' }}
-                      >
-                        {line}
-                      </div>
-                    </div>
-                  ))}
-                </h2>
-
-                {/* Cards row */}
-                <div className="grid grid-cols-3 gap-3 lg:gap-4">
-                  {panel.cards.map((card, ci) => {
-                    const Icon = card.Icon
-                    return (
-                      <div
-                        key={ci}
-                        ref={el => { cardRefs.current[i * 3 + ci] = el }}
-                        className="bg-white rounded-2xl p-5 lg:p-6 shadow-sm"
-                        style={{ opacity: 0 }}
-                      >
-                        <Icon size={26} className="text-gray-900" strokeWidth={1.5} />
-                        <h3 className="text-gray-900 text-sm font-semibold mt-4 leading-snug">
-                          {card.title}
-                        </h3>
-                        <p className="text-gray-500 text-xs mt-2 leading-relaxed">
-                          {card.desc}
-                        </p>
-                      </div>
-                    )
-                  })}
+            {/* Title */}
+            <h2 className="text-[clamp(2.6rem,5.2vw,7rem)] font-bold text-gray-900 leading-[0.88] tracking-tight mb-7">
+              {panel.title.map((line, li) => (
+                <div key={li} className="overflow-hidden">
+                  <div
+                    ref={el => { titleLineRefs.current[i * 2 + li] = el }}
+                    style={{ transform: 'translateY(110%)' }}
+                  >
+                    {line}
+                  </div>
                 </div>
+              ))}
+            </h2>
 
-              </div>
-
-              {/* Right: image placeholder — parallelogram clip */}
-              {/* Replace the inner div's background with <Image> when ready */}
-              <div
-                className="hidden lg:block h-full min-h-[340px] overflow-hidden"
-                style={{ clipPath: 'polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%)' }}
-              >
-                <div
-                  className="h-full w-full"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}
-                />
-              </div>
-
+            {/* Cards row */}
+            <div className="grid grid-cols-3 gap-3 lg:gap-4">
+              {panel.cards.map((card, ci) => {
+                const Icon = card.Icon
+                return (
+                  <div
+                    key={ci}
+                    ref={el => { cardRefs.current[i * 3 + ci] = el }}
+                    className="bg-white rounded-2xl p-5 lg:p-6 shadow-sm"
+                    style={{ opacity: 0 }}
+                  >
+                    <Icon size={26} className="text-gray-900" strokeWidth={1.5} />
+                    <h3 className="text-gray-900 text-sm font-semibold mt-4 leading-snug">
+                      {card.title}
+                    </h3>
+                    <p className="text-gray-500 text-xs mt-2 leading-relaxed">
+                      {card.desc}
+                    </p>
+                  </div>
+                )
+              })}
             </div>
+
+            {/* Image placeholder — absolute right, parallelogram clip.
+                Replace the inner div with <Image> when ready. */}
+            <div
+              className="hidden lg:block absolute right-0 top-0 bottom-0 w-[36%]"
+              style={{ clipPath: 'polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%)' }}
+            >
+              <div className="h-full w-full" style={{ backgroundColor: 'rgba(0,0,0,0.055)' }} />
+            </div>
+
           </Container>
         </section>
       ))}
