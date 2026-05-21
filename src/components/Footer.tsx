@@ -12,14 +12,13 @@ const columns = [
     ],
   },
   {
-    heading: 'Destinasyonlar',
+    heading: 'Şehirler',
     links: [
-      'Rusya',
-      'Almanya',
-      'İngiltere',
-      'Kanada',
-      'Avustralya',
-      'Tümünü Gör',
+      'Moskova',
+      'Sankt-Peterburg',
+      'Ekaterinburg',
+      'Kazan',
+      'Nijniy Novgorod',
     ],
   },
   {

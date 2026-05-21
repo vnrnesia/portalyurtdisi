@@ -6,6 +6,7 @@ import Testimonials from '@/components/sections/Testimonials'
 import HowWeWork from '@/components/sections/HowWeWork'
 import CitiesSection from '@/components/sections/CitiesSection'
 import NewsSlider from '@/components/sections/NewsSlider'
+import CTABanner from '@/components/sections/CTABanner'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
         <HowWeWork />
         <CitiesSection />
         <NewsSlider />
+        <CTABanner />
       </main>
       <Footer />
     </>

@@ -6,7 +6,6 @@ import HeroVideo from './HeroVideo'
 
 export default function Hero() {
   const sectionRef   = useRef<HTMLElement>(null)
-  const dividerRef   = useRef<HTMLDivElement>(null)
   const headlineRef  = useRef<HTMLHeadingElement>(null)
   const rightColRef  = useRef<HTMLDivElement>(null)
   const contentRef   = useRef<HTMLDivElement>(null)
@@ -30,15 +29,9 @@ export default function Hero() {
       const tl = gsap.timeline({ delay: 0.5 })
 
       tl.fromTo(
-        dividerRef.current,
-        { scaleX: 0, transformOrigin: 'left' },
-        { scaleX: 1, duration: 1, ease: 'power3.out' }
-      )
-      .fromTo(
         headlineRef.current,
         { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' },
-        '-=0.6'
+        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }
       )
       .fromTo(
         rightColRef.current,
@@ -70,14 +63,6 @@ export default function Hero() {
         className="absolute inset-0 flex flex-col justify-end pb-12 px-8 lg:px-16"
         style={{ zIndex: 4 }}
       >
-        {/* Divider */}
-        <div ref={dividerRef} className="flex items-center gap-4 mb-10">
-          <span className="text-[11px] text-white/50 tracking-[0.25em] uppercase whitespace-nowrap">
-            + Home
-          </span>
-          <div className="flex-1 h-px bg-white/20" />
-        </div>
-
         {/* Alt grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[62fr_38fr] gap-10 lg:gap-16 items-end">
           <h1
