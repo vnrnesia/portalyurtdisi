@@ -7,6 +7,7 @@ import HowWeWork from '@/components/sections/HowWeWork'
 import CitiesSection from '@/components/sections/CitiesSection'
 import ContactFormSection from '@/components/sections/ContactFormSection'
 import NewsSlider from '@/components/sections/NewsSlider'
+import LatestBlogPosts from '@/components/sections/LatestBlogPosts'
 import FAQSection from '@/components/sections/FAQSection'
 import CTABanner from '@/components/sections/CTABanner'
 import Footer from '@/components/Footer'
@@ -24,6 +25,7 @@ export default function Home() {
         <CitiesSection />
         <ContactFormSection />
         <NewsSlider />
+        <LatestBlogPosts />
         <FAQSection />
         <CTABanner />
       </main>
