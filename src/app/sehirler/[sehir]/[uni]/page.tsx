@@ -42,8 +42,8 @@ export default async function UniversityPage({
       <main>
 
         {/* ── Hero ── */}
-        <section className="bg-[#1c1c1c] pt-12 pb-16">
-          <div className="max-w-7xl mx-auto px-8 lg:px-16">
+        <section className="bg-[#1c1c1c] pt-10 pb-14 lg:pt-12 lg:pb-16">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
 
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-white/40 text-[12px] font-medium mb-10">
@@ -83,7 +83,7 @@ export default async function UniversityPage({
 
               <a
                 href="#"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#f04420] text-white text-[14px] font-semibold rounded-full hover:bg-[#d93a1a] transition-colors shrink-0"
+                className="self-start lg:self-auto inline-flex items-center gap-2 px-6 py-3 lg:px-7 lg:py-3.5 bg-[#f04420] text-white text-[13px] lg:text-[14px] font-semibold rounded-full hover:bg-[#d93a1a] transition-colors shrink-0"
               >
                 Başvuru Yap <ArrowRight size={14} strokeWidth={2.5} />
               </a>
@@ -93,8 +93,8 @@ export default async function UniversityPage({
 
         {/* ── Highlights ── */}
         <section className="bg-[#f4f4f2] border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-8 lg:px-16 py-10">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 py-8 lg:py-10">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-6">
               {university.highlights.map(h => (
                 <div key={h.label}>
                   <p className="text-[11px] font-semibold tracking-widest uppercase text-gray-400 mb-1">
@@ -108,9 +108,9 @@ export default async function UniversityPage({
         </section>
 
         {/* ── Description + Programs + Requirements ── */}
-        <section className="bg-white py-20 lg:py-28">
-          <div className="max-w-7xl mx-auto px-8 lg:px-16">
-            <div className="grid lg:grid-cols-[1fr_400px] gap-16 lg:gap-24">
+        <section className="bg-white py-12 lg:py-28">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
+            <div className="grid lg:grid-cols-[1fr_400px] gap-10 lg:gap-24">
 
               {/* Left: Description + Programs */}
               <div>
@@ -193,8 +193,8 @@ export default async function UniversityPage({
         </section>
 
         {/* ── Other universities in city ── */}
-        <section className="bg-[#f9f9f7] py-16">
-          <div className="max-w-7xl mx-auto px-8 lg:px-16">
+        <section className="bg-[#f9f9f7] py-10 lg:py-16">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
             <p className="text-[11px] font-semibold tracking-[0.4em] uppercase text-gray-400 mb-6">
               {city.name.toUpperCase()}'DAKİ DİĞER ÜNİVERSİTELER
             </p>

@@ -317,7 +317,33 @@ export default function UniversityGrid() {
     <section className="bg-white mt-16 py-16 lg:py-24">
       <StatsTicker />
 
-      <Container className="overflow-hidden">
+      {/* Mobile: simple logo grid */}
+      <Container className="lg:hidden mt-8 overflow-hidden">
+        <div className="bg-gray-100 p-1 rounded-xl grid grid-cols-4 gap-1">
+          {/* Info card */}
+          <div className="col-span-4 bg-gray-50 p-5 rounded-xl">
+            <p className="text-[10px] font-semibold tracking-[0.2em] text-gray-400 uppercase mb-2">Keşfet</p>
+            <p className="text-[0.95rem] font-semibold text-gray-900 leading-snug">
+              Rusya&apos;nın önde gelen üniversitelerinde{' '}
+              <span className="text-orange-500">eğitim fırsatlarını</span> keşfet.
+            </p>
+          </div>
+          {UNIVERSITIES.map(uni => (
+            <div
+              key={uni.id}
+              className="relative bg-white rounded-lg overflow-hidden flex items-center justify-center"
+              style={{ height: 90 }}
+            >
+              <div className="flex items-center justify-center p-2">
+                {logos[uni.id]?.('#c0c0c0', false)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+
+      {/* Desktop: full interactive grid */}
+      <Container className="hidden lg:block overflow-hidden">
         <div
           ref={containerRef}
           className="relative grid bg-gray-100 p-1 rounded-xl"

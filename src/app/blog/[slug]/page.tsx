@@ -36,13 +36,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Hero image */}
         {image && (
-          <div className="w-full aspect-[21/7] overflow-hidden bg-gray-100">
+          <div className="w-full aspect-[4/3] sm:aspect-[16/7] md:aspect-[21/7] overflow-hidden bg-gray-100">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={image} alt={post.title.rendered} className="w-full h-full object-cover" />
           </div>
         )}
 
-        <article className="max-w-3xl mx-auto px-8 lg:px-0 py-16">
+        <article className="max-w-3xl mx-auto px-5 sm:px-8 lg:px-0 py-12 lg:py-16">
 
           {/* Back */}
           <Link

@@ -39,11 +39,11 @@ export default function NavBar({
       </a>
 
       {/* Sağ navigasyon */}
-      <div className="flex items-center gap-8">
-        {/* All Pages dropdown trigger */}
+      <div className="flex items-center gap-4 lg:gap-8">
+        {/* All Pages dropdown trigger — desktop only */}
         <button
           onClick={onMenuToggle}
-          className="flex items-center gap-1 text-sm font-medium text-gray-800 hover:text-orange-500 transition-colors"
+          className="hidden lg:flex items-center gap-1 text-sm font-medium text-gray-800 hover:text-orange-500 transition-colors"
         >
           All Pages
           <ChevronDown
@@ -56,7 +56,7 @@ export default function NavBar({
           <Link
             key={link.href}
             href={link.href}
-            className="text-sm font-medium text-gray-800 hover:text-orange-500 transition-colors"
+            className="hidden lg:block text-sm font-medium text-gray-800 hover:text-orange-500 transition-colors"
           >
             {link.label}
           </Link>
@@ -64,7 +64,7 @@ export default function NavBar({
 
         <Link
           href="/iletisim"
-          className="inline-flex items-center px-5 py-2 bg-[#f04420] hover:bg-[#d93a1a] transition-colors text-white text-sm font-semibold rounded-full"
+          className="hidden sm:inline-flex items-center px-4 py-2 lg:px-5 bg-[#f04420] hover:bg-[#d93a1a] transition-colors text-white text-sm font-semibold rounded-full"
         >
           İletişim
         </Link>

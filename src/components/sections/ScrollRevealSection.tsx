@@ -221,7 +221,7 @@ export default function ScrollRevealSection() {
             <div className="flex-1" />
 
             {/* Title */}
-            <h2 className="text-[clamp(2.6rem,5.2vw,7rem)] font-bold text-[#f04420] leading-[0.88] tracking-tight mb-7">
+            <h2 className="text-[clamp(1.8rem,5.2vw,7rem)] font-bold text-[#f04420] leading-[0.88] tracking-tight mb-7">
               {panel.title.map((line, li) => (
                 <div key={li} className="overflow-hidden">
                   <div
@@ -235,7 +235,7 @@ export default function ScrollRevealSection() {
             </h2>
 
             {/* Cards row */}
-            <div className="grid grid-cols-3 gap-3 lg:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4">
               {panel.cards.map((card, ci) => {
                 const Icon = card.Icon
                 return (

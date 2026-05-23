@@ -42,8 +42,8 @@ export default function Footer() {
     <footer className="bg-[#f4f4f2] border-t border-gray-200">
 
       {/* ── Frame 14: Newsletter + Nav ── */}
-      <div className="max-w-7xl mx-auto px-8 lg:px-16 py-16 lg:py-20">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-16 py-12 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-24">
 
           {/* Left: heading + newsletter */}
           <div>
@@ -90,7 +90,7 @@ export default function Footer() {
           </div>
 
           {/* Right: nav + legal + socials */}
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-2 gap-6 lg:gap-8">
 
             {/* Navigasyon */}
             <div>
@@ -132,9 +132,9 @@ export default function Footer() {
 
             {/* Sosyal medya */}
             <div className="col-span-2 pt-4 border-t border-gray-200">
-              <div className="flex items-center gap-6">
+              <div className="flex flex-wrap items-center gap-4 lg:gap-6">
                 <p className="text-[12px] text-gray-500 shrink-0">Bizi sosyal medyada takip et</p>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 lg:gap-4 flex-wrap">
                   {SOCIALS.map(s => (
                     <a
                       key={s.label}
@@ -155,8 +155,8 @@ export default function Footer() {
 
       {/* ── Frame 18: Branding + Contact ── */}
       <div>
-        <div className="max-w-7xl mx-auto px-8 lg:px-16 pt-10 pb-0">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-end">
+        <div className="max-w-7xl mx-auto px-6 lg:px-16 pt-10 pb-0">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-24 items-end">
 
             {/* Left: tagline + logo + credit + copyright */}
             <div className="flex flex-col gap-6 pb-10">
@@ -206,7 +206,7 @@ export default function Footer() {
             </div>
 
             {/* Right: OFİS + MAİL + TELEFON + arrow */}
-            <div className="grid grid-cols-2 gap-x-12 gap-y-0 pb-10">
+            <div className="grid grid-cols-2 gap-x-6 lg:gap-x-12 gap-y-0 pb-10">
 
               {/* OFİS */}
               <div className="pb-8">
@@ -240,7 +240,7 @@ export default function Footer() {
                   <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
                 </div>
                 <div className="flex items-end justify-between">
-                  <p className="text-[2rem] font-bold text-gray-900 leading-tight tracking-tight">
+                  <p className="text-[1.4rem] lg:text-[2rem] font-bold text-gray-900 leading-tight tracking-tight">
                     +7 (917) 889-94-57
                   </p>
                   <button

@@ -61,7 +61,7 @@ export default function Hero() {
 
       <div
         ref={contentRef}
-        className="absolute inset-0 flex flex-col justify-end pb-12 px-8 lg:px-16"
+        className="absolute inset-0 flex flex-col justify-end pb-8 lg:pb-12 px-5 sm:px-8 lg:px-16"
         style={{ zIndex: 4 }}
       >
         {/* Alt grid */}
@@ -75,8 +75,8 @@ export default function Hero() {
             Şekillendir
           </h1>
 
-          <div ref={rightColRef} className="flex flex-col gap-8 pb-1">
-            <p className="text-white/65 text-base lg:text-[17px] leading-relaxed max-w-sm">
+          <div ref={rightColRef} className="flex flex-col gap-5 lg:gap-8 pb-1">
+            <p className="text-white/65 text-[14px] lg:text-[17px] leading-relaxed max-w-sm">
               ↳ Dünyanın en iyi üniversitelerinde eğitim
               fırsatları ve burs rehberi bir arada.
             </p>

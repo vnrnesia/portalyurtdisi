@@ -31,8 +31,8 @@ export default async function CityPage({ params }: { params: Promise<{ sehir: st
       <main>
 
         {/* ── Hero ── */}
-        <section className="bg-white pt-10">
-          <div className="max-w-7xl mx-auto px-8 lg:px-16">
+        <section className="bg-white pt-6 lg:pt-10">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
 
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-gray-400 text-[12px] font-medium tracking-wide mb-6">
@@ -79,9 +79,9 @@ export default async function CityPage({ params }: { params: Promise<{ sehir: st
         </section>
 
         {/* ── Description + Stats ── */}
-        <section className="bg-white py-20 lg:py-28">
-          <div className="max-w-7xl mx-auto px-8 lg:px-16">
-            <div className="grid lg:grid-cols-[1fr_320px] gap-16 lg:gap-24 items-start">
+        <section className="bg-white py-12 lg:py-28">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
+            <div className="grid lg:grid-cols-[1fr_320px] gap-10 lg:gap-24 items-start">
 
               <div className="space-y-5">
                 {city.paragraphs.map((p, i) => (
@@ -131,8 +131,8 @@ export default async function CityPage({ params }: { params: Promise<{ sehir: st
         </section>
 
         {/* ── Universities Grid ── */}
-        <section className="bg-[#f9f9f7] py-20 lg:py-28">
-          <div className="max-w-7xl mx-auto px-8 lg:px-16">
+        <section className="bg-[#f9f9f7] py-12 lg:py-28">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
 
             <div className="mb-12">
               <div className="flex items-center gap-2.5 mb-4">

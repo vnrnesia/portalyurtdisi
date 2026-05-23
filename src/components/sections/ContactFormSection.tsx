@@ -63,12 +63,12 @@ export default function ContactFormSection() {
       <div className="max-w-7xl mx-auto px-8 lg:px-16">
         <div
           ref={sectionRef}
-          className="relative overflow-hidden rounded-2xl grid lg:grid-cols-2"
-          style={{ backgroundColor: '#1c1c1c', height: '520px' }}
+          className="relative overflow-hidden rounded-2xl grid lg:grid-cols-2 lg:h-[520px]"
+          style={{ backgroundColor: '#1c1c1c' }}
         >
 
           {/* ── Left: Form ── */}
-          <div className="relative z-10 px-10 lg:px-14 py-10 lg:py-12">
+          <div className="relative z-10 px-6 sm:px-10 lg:px-14 py-10 lg:py-12">
 
             {/* Badge */}
             <div className="inline-flex items-center px-3 py-1 rounded-full border border-white/20 mb-4">
