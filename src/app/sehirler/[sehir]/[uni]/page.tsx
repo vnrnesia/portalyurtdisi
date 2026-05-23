@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, CheckCircle, ChevronRight } from 'lucide-react'
 import Header from '@/components/header'
 import Footer from '@/components/Footer'
+import ContactFormSection from '@/components/sections/ContactFormSection'
 import { cities, getCity, getUniversity } from '@/lib/cities-data'
 
 export function generateStaticParams() {
@@ -172,17 +173,6 @@ export default async function UniversityPage({
                   </ul>
                 </div>
 
-                {/* Tuition */}
-                <div className="bg-[#1c1c1c] rounded-2xl p-7">
-                  <p className="text-[11px] font-semibold tracking-[0.4em] uppercase text-white/40 mb-3">
-                    YILLIK ÜCRETLENDİRME
-                  </p>
-                  <p className="text-[1.6rem] font-bold text-white leading-tight mb-1">
-                    {university.tuition}
-                  </p>
-                  <p className="text-white/40 text-[12px]">Programa ve yıla göre değişiklik gösterebilir.</p>
-                </div>
-
                 {/* CTA card */}
                 <div className="bg-[#f04420] rounded-2xl p-7">
                   <p className="text-white font-bold text-[16px] mb-2">Başvurmaya hazır mısınız?</p>
@@ -231,6 +221,7 @@ export default async function UniversityPage({
         </section>
 
       </main>
+      <ContactFormSection />
       <Footer />
     </>
   )

@@ -1,6 +1,7 @@
 import { getPostBySlug, getPosts, getFeaturedImage, getCategories_from_post, formatDate } from '@/lib/wordpress'
 import Header from '@/components/header'
 import Footer from '@/components/Footer'
+import ContactFormSection from '@/components/sections/ContactFormSection'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
@@ -79,6 +80,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </article>
 
       </main>
+      <ContactFormSection />
       <Footer />
     </>
   )
