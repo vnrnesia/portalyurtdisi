@@ -170,11 +170,11 @@ export default function HowWeWork() {
             style={{ top: '148px' }}
           >
             {/* Kicker */}
-            <div className="flex items-center gap-2.5 mb-8">
-              <span className="w-3 h-3 rounded-sm bg-[#f04420] shrink-0" />
-              <span className="text-[11px] font-semibold tracking-[0.42em] uppercase text-[#f04420]">
-                NASIL ÇALIŞIYORUZ
-              </span>
+            <div className="mb-8">
+              <p className="text-[10px] font-semibold tracking-[0.32em] uppercase text-gray-400 mb-2">NASIL ÇALIŞIYORUZ</p>
+              <div className="relative h-px bg-white/20 w-full">
+                <div className="absolute left-0 top-0 w-8 h-[2px] bg-[#f04420] -translate-y-px" />
+              </div>
             </div>
 
             {/* Headline */}

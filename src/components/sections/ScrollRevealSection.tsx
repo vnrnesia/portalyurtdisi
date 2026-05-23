@@ -4,10 +4,11 @@ import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
-  GraduationCap, Globe, UserCircle,
-  Banknote, CalendarClock, BookOpen,
-  FileText, ListChecks, Zap,
-  Home, Layers, Users,
+  GraduationCap, Target, UserCircle,
+  FileText, Languages, Stamp,
+  Send, ListChecks, Mail,
+  ShieldCheck, FolderOpen, ClipboardList,
+  Plane, MapPin, Heart,
 } from 'lucide-react'
 import Container from '@/components/ui/Container'
 
@@ -34,50 +35,62 @@ interface Panel {
 const panels: Panel[] = [
   {
     id: '01',
-    label: 'Üniversite Seçimi',
-    title: ['Hayalindeki', 'Okulu Bul'],
+    label: 'Ülke ve Üniversite Seçimi',
+    title: ['Doğru Ülke ve', 'Üniversite Seçimi'],
     bg: '#1c1c1c',
     labelColor: '#f04420',
     cards: [
-      { Icon: GraduationCap, title: '500+ Üniversite', desc: 'Dünyanın en prestijli okulları tek çatı altında' },
-      { Icon: Globe, title: '45+ Ülke', desc: 'Her kıtada eğitim ve kariyer fırsatı' },
-      { Icon: UserCircle, title: 'Kişisel Eşleşme', desc: 'Profiline göre üniversite öneri sistemi' },
+      { Icon: GraduationCap, title: 'Akademik Analiz', desc: 'Öğrencinin akademik geçmişi, kariyer hedefleri ve sosyal yaşam beklentisi değerlendirilir.' },
+      { Icon: Target, title: 'Bütçe & Dil Faktörleri', desc: 'Bütçe uygunluğu, dil seviyesi ve adaptasyon faktörleri detaylı şekilde analiz edilir.' },
+      { Icon: UserCircle, title: 'Kariyer Planlaması', desc: 'Öğrenciye özel kariyer planlaması yapılır ve en uygun ülke ile üniversite seçenekleri belirlenir.' },
     ],
   },
   {
     id: '02',
-    label: 'Burs & Finansman',
-    title: ['Eğitimini', 'Finanse Et'],
-    bg: '#232323',
+    label: 'Evrak Hazırlık ve Tercüme',
+    title: ['Evrak Hazırlık ve', 'Resmi Tercüme Süreci'],
+    bg: '#222222',
     labelColor: '#f04420',
     cards: [
-      { Icon: Banknote, title: 'Burs Veritabanı', desc: "1000'den fazla burs fırsatı listesi" },
-      { Icon: CalendarClock, title: 'Başvuru Takvimi', desc: 'Son başvuru tarihlerini kaçırma' },
-      { Icon: BookOpen, title: 'Danışman Desteği', desc: 'Uzman ekibimizle başvuru hazırlığı' },
+      { Icon: FileText, title: 'Resmi Belgeler', desc: 'Diploma, transkript, pasaport, fotoğraf, sağlık raporu ve gerekli tüm belgeler eksiksiz hazırlanır.' },
+      { Icon: Languages, title: 'Yeminli Tercüme', desc: 'Tüm belgeler yeminli tercüman tarafından çevrilir ve gerektiğinde noter onaylı hale getirilir.' },
+      { Icon: Stamp, title: 'Noter Onayı', desc: 'Başvuru kriterlerine uygun olarak belgeler resmi onay sürecinden eksiksiz geçirilir.' },
     ],
   },
   {
     id: '03',
-    label: 'Vize & Hazırlık',
-    title: ['Sınırları', 'Aş'],
-    bg: '#2a2a2a',
+    label: 'Başvuru ve Davetiye Süreci',
+    title: ['Üniversite Başvurusu', 've Davetiye Süreci'],
+    bg: '#282828',
     labelColor: '#f04420',
     cards: [
-      { Icon: FileText, title: 'Vize Rehberi', desc: 'Ülkeye özel adım adım vize süreci' },
-      { Icon: ListChecks, title: 'Belge Kontrol', desc: 'Eksik evrak bırakmayan hazırlık listesi' },
-      { Icon: Zap, title: 'Hızlı Başvuru', desc: 'Ortalama 3 günde vize randevusu' },
+      { Icon: Send, title: 'Başvuru Takibi', desc: 'Üniversite başvurusu yapılır, süreç titizlikle takip edilir ve resmi kayıt işlemleri başlatılır.' },
+      { Icon: Mail, title: 'Davet Mektubu', desc: 'İçişleri Bakanlığı onaylı resmi davet mektubu süreci danışmanlık ekibimiz tarafından yönetilir.' },
+      { Icon: ListChecks, title: 'Prosedür Yönetimi', desc: 'Bu aşamada tüm resmi prosedürler danışmanlık ekibimiz tarafından eksiksiz takip edilir.' },
     ],
   },
   {
     id: '04',
-    label: 'Kampüs Hayatı',
-    title: ['Yeni Hayatına', 'Başla'],
-    bg: '#313131',
+    label: 'Vize İşlemi',
+    title: ['Vize', 'İşlemi'],
+    bg: '#2e2e2e',
     labelColor: '#f04420',
     cards: [
-      { Icon: Home, title: 'Konaklama', desc: 'Yurt, apart ve kiralık daire rehberi' },
-      { Icon: Layers, title: 'Kampüs Hayatı', desc: 'Kulüpler, etkinlikler ve sosyal ağlar' },
-      { Icon: Users, title: 'Topluluk', desc: 'Aynı şehirdeki Türk öğrenci ağı' },
+      { Icon: ClipboardList, title: 'Evrak Listesi', desc: 'Başarılı kabul ve davetiye alındıktan sonra konsolosluk için gerekli evrak listesi hazırlanır.' },
+      { Icon: FolderOpen, title: 'Başvuru Dosyası', desc: 'Vize başvuru dosyası eksiksiz oluşturulur, Türkiye\'deki ilgili konsolosluklara başvuru yapılır.' },
+      { Icon: ShieldCheck, title: 'Adım Adım Takip', desc: 'Vize süreci danışmanlarımız tarafından başından sonuna kadar adım adım takip edilir.' },
+    ],
+  },
+  {
+    id: '05',
+    label: 'Varış ve Adaptasyon Süreci',
+    title: ["Rusya'ya Varış ve", 'Adaptasyon Süreci'],
+    bg: '#343434',
+    labelColor: '#f04420',
+    cards: [
+      { Icon: Plane, title: 'Uçuş Organizasyonu', desc: 'Uygun tarihte uçak bileti organizasyonu yapılır, İstanbul Havalimanı\'ndan danışman eşliğinde kafileli uçuş gerçekleştirilir.' },
+      { Icon: MapPin, title: 'Varış Desteği', desc: 'Varışta karşılama ve yurda yerleşim sağlanır, ulaşım kartı, sağlık sigortası ve SIM kart işlemleri tamamlanır.' },
+      { Icon: Heart, title: '15 Günlük Adaptasyon', desc: 'Öğrenciler için 15 günlük adaptasyon ve rehberlik süreci başlatılır.' },
     ],
   },
 ]

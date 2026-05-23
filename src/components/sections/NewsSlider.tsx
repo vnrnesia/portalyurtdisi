@@ -142,11 +142,11 @@ export default function NewsSlider() {
         {/* ── Header ── */}
         <div className="flex items-end justify-between mb-10 lg:mb-14">
           <div>
-            <div className="flex items-center gap-2.5 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              <span className="text-[11px] font-semibold tracking-[0.42em] uppercase text-green-500">
-                HABERLER
-              </span>
+            <div className="mb-5">
+              <p className="text-[10px] font-semibold tracking-[0.32em] uppercase text-gray-500 mb-2">HABERLER</p>
+              <div className="relative h-px bg-gray-300 w-full">
+                <div className="absolute left-0 top-0 w-8 h-[2px] bg-[#f04420] -translate-y-px" />
+              </div>
             </div>
             <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-bold text-gray-900 leading-tight tracking-tight">
               Güncel Haberler<br />ve Duyurular
@@ -171,11 +171,13 @@ export default function NewsSlider() {
           </div>
         </div>
 
-        {/* ── Desktop Accordion ── */}
-        <div
-          className="hidden lg:flex gap-[3px] overflow-hidden rounded-2xl"
-          style={{ height: 520 }}
-        >
+      </Container>
+
+      {/* ── Desktop Accordion ── */}
+      <div
+        className="hidden lg:flex gap-[3px] overflow-hidden px-8 lg:px-16"
+        style={{ height: 520 }}
+      >
           {slides.map((slide, i) => {
             const isActive = i === activeIndex
             return (
@@ -232,8 +234,9 @@ export default function NewsSlider() {
               </div>
             )
           })}
-        </div>
+      </div>
 
+      <Container className="px-8 lg:px-16">
         {/* ── Text Content (desktop) — cross-fades on change ── */}
         <div
           ref={contentRef}

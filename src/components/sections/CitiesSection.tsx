@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import { GraduationCap, Users, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Container from '@/components/ui/Container'
 
@@ -11,53 +12,58 @@ const CARD_H      = 540
 const cities = [
   {
     id: 'moscow',
+    slug: 'moskova',
     name: 'Moskova',
     ru: 'Москва',
     unis: '5',
     students: '12.000+',
     desc: "Rusya'nın başkenti ve en büyük eğitim merkezi. MGU, RUDN, HSE, Bauman ve MEPhI gibi dünya çapında üniversitelere ev sahipliği yapıyor.",
-    seed: '10',
+    img: '/cities/moscow.png',
   },
   {
     id: 'spb',
+    slug: 'sankt-peterburg',
     name: 'Sankt-Peterburg',
     ru: 'Санкт-Петербург',
     unis: '3',
     students: '8.500+',
     desc: "Kuzey Avrupa'nın kültür başkenti. SPbGU, SPbPU ve ITMO ile köklü akademik geleneğiyle eşsiz bir eğitim ortamı.",
-    seed: '20',
+    img: '/cities/petersburg.png',
   },
   {
     id: 'ekaterinburg',
+    slug: 'ekaterinburg',
     name: 'Ekaterinburg',
     ru: 'Екатеринбург',
     unis: '2',
     students: '2.800+',
     desc: "Ural bölgesinin sanayi ve kültür başkenti. Ural Federal Üniversitesi hem Rusça hem İngilizce programlarıyla öne çıkıyor.",
-    seed: '50',
+    img: '/cities/yekaterinburg.png',
   },
   {
     id: 'kazan',
+    slug: 'kazan',
     name: 'Kazan',
     ru: 'Казань',
     unis: '3',
     students: '3.200+',
     desc: "Tataristan'ın başkenti, hem Türkçe hem Rusça konuşulan çok kültürlü bir eğitim şehri. Türk öğrenciler için ideal.",
-    seed: '30',
+    img: '/cities/view-of-the-kazan-kremlin-2026-03-24-08-50-35-utc.jpg',
   },
   {
     id: 'nnov',
+    slug: 'nijniy-novgorod',
     name: 'Nijniy Novgorod',
     ru: 'Нижний Новгород',
     unis: '2',
     students: '2.400+',
     desc: "Volga ve Oka nehirleri kavşağındaki tarihi şehir. UNN Lobaçevskiy ve HSE NN ile bilişim ve araştırma odaklı güçlü seçenekler.",
-    seed: '80',
+    img: '/cities/nijniy.png',
   },
 ]
 
 export default function CitiesSection() {
-  const [activeId, setActiveId]           = useState<string | null>(null)
+  const [activeId, setActiveId]           = useState<string | null>('kazan')
   const [userHovering, setUserHovering]   = useState(false)
   // scrollRef → overflow-x: auto wrapper (scroll position lives here)
   // trackRef  → inner flex container (card offsetLeft relative to this)
@@ -65,7 +71,7 @@ export default function CitiesSection() {
   const trackRef    = useRef<HTMLDivElement>(null)
   const cardRefs    = useRef<(HTMLDivElement | null)[]>([])
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const lastIdxRef  = useRef<number>(-1)
+  const lastIdxRef  = useRef<number>(3)
 
   // Returns indices of cards whose left edge is currently inside the scroll viewport
   const getVisibleIndices = useCallback((): number[] => {
@@ -102,7 +108,7 @@ export default function CitiesSection() {
     }
     const timeout = setTimeout(() => {
       pickRandom()
-      intervalRef.current = setInterval(pickRandom, 2800)
+      intervalRef.current = setInterval(pickRandom, 10000)
     }, 1200)
     return () => {
       clearTimeout(timeout)
@@ -115,17 +121,16 @@ export default function CitiesSection() {
   }
 
   return (
-    <section className="bg-[#f9f9f7] py-20 lg:py-28">
+    <section className="bg-white py-20 lg:py-28">
       <Container className="px-8 lg:px-16">
-
         {/* ── Header ── */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 lg:mb-14">
           <div>
-            <div className="flex items-center gap-2.5 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-              <span className="text-[11px] font-semibold tracking-[0.42em] uppercase text-red-500">
-                ŞEHİRLER
-              </span>
+            <div className="mb-5">
+              <p className="text-[10px] font-semibold tracking-[0.32em] uppercase text-gray-500 mb-2">ŞEHİRLER</p>
+              <div className="relative h-px bg-gray-300 w-full">
+                <div className="absolute left-0 top-0 w-8 h-[2px] bg-[#f04420] -translate-y-px" />
+              </div>
             </div>
             <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-bold text-gray-900 leading-tight tracking-tight">
               Rusya'da Eğitim<br />Vereceğiniz Şehirler
@@ -156,20 +161,21 @@ export default function CitiesSection() {
           </div>
         </div>
 
-        {/* ── Scrollable track — constrained to Container width ── */}
+      </Container>
+
+      {/* ── Full-width track ── */}
+      <div
+        ref={scrollRef}
+        className="overflow-x-auto [&::-webkit-scrollbar]:hidden px-8 lg:px-16"
+        style={{ scrollbarWidth: 'none', height: CARD_H }}
+        onMouseEnter={() => setUserHovering(true)}
+        onMouseLeave={() => { setUserHovering(false); setActiveId('kazan') }}
+      >
         <div
-          ref={scrollRef}
-          className="overflow-x-auto [&::-webkit-scrollbar]:hidden rounded-2xl"
-          style={{ scrollbarWidth: 'none', height: CARD_H }}
-          onMouseEnter={() => setUserHovering(true)}
-          onMouseLeave={() => { setUserHovering(false); setActiveId(null) }}
+          ref={trackRef}
+          className="flex gap-[3px] h-full"
+          style={{ width: '100%', minWidth: 'max-content' }}
         >
-          {/* Inner flex — width determined by cards, not the scroll container */}
-          <div
-            ref={trackRef}
-            className="flex gap-[3px] h-full"
-            style={{ width: 'max-content' }}
-          >
             {cities.map((city, i) => {
               const isActive = activeId === city.id
 
@@ -179,17 +185,19 @@ export default function CitiesSection() {
                   ref={el => { cardRefs.current[i] = el }}
                   className="relative flex-shrink-0 overflow-hidden cursor-pointer"
                   style={{
-                    width: isActive ? EXPANDED_W : COLLAPSED_W,
+                    width: isActive ? EXPANDED_W : undefined,
+                    flex: isActive ? `0 0 ${EXPANDED_W}px` : '1 1 0',
+                    minWidth: isActive ? EXPANDED_W : COLLAPSED_W,
                     height: CARD_H,
                     borderRadius: 16,
-                    transition: 'width 0.55s cubic-bezier(0.4,0,0.2,1)',
+                    transition: 'flex 0.55s cubic-bezier(0.4,0,0.2,1), min-width 0.55s cubic-bezier(0.4,0,0.2,1)',
                   }}
                   onMouseEnter={() => setActiveId(city.id)}
                 >
                   {/* Photo */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={`https://picsum.photos/seed/${city.seed}/700/1100`}
+                    src={city.img}
                     alt={city.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     style={{
@@ -259,17 +267,18 @@ export default function CitiesSection() {
                       </div>
                     </div>
 
-                    <button className="self-start flex items-center gap-2 px-4 py-2 rounded-full bg-white text-gray-900 text-[12px] font-semibold hover:bg-white/90 transition-colors">
+                    <Link
+                      href={`/sehirler/${city.slug}`}
+                      className="self-start flex items-center gap-2 px-4 py-2 rounded-full bg-white text-gray-900 text-[12px] font-semibold hover:bg-white/90 transition-colors"
+                    >
                       Keşfet <ArrowRight size={12} strokeWidth={2.5} />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               )
             })}
-          </div>
         </div>
-
-      </Container>
+      </div>
     </section>
   )
 }

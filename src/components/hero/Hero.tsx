@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
+import Link from 'next/link'
 import gsap from 'gsap'
 import HeroVideo from './HeroVideo'
 
@@ -81,17 +82,17 @@ export default function Hero() {
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <a
-                href="#"
+                href="#universiteler"
                 className="inline-flex items-center px-6 py-3 border border-white/25 bg-white/10 backdrop-blur-sm text-white text-sm font-medium hover:bg-white/20 transition-colors"
               >
                 Keşfet
               </a>
-              <a
-                href="#"
+              <Link
+                href="/iletisim"
                 className="inline-flex items-center px-6 py-3 bg-orange-500 hover:bg-orange-600 transition-colors text-white text-sm font-medium"
               >
                 Danışmanlık Al
-              </a>
+              </Link>
             </div>
           </div>
         </div>

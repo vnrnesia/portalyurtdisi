@@ -42,7 +42,7 @@ export default function AnnouncementTicker() {
   const items = [...announcements, ...announcements]
 
   return (
-    <div className="bg-[#f5f0e6] border-t border-gray-200">
+    <div className="bg-white border-t border-gray-200">
       <div className="flex items-center h-9">
         {/* Sabit sol metin */}
         <div className="flex-shrink-0 px-6 text-[13px] font-bold text-gray-900 border-r border-gray-300 h-full flex items-center">

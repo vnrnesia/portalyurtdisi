@@ -1,9 +1,15 @@
 'use client'
 
-import { ChevronDown, Search, Menu, X } from 'lucide-react'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
-const navLinks = ['Events', 'Research', 'Faculty']
+const navLinks = [
+  { label: 'Şehirler', href: '/sehirler' },
+  { label: 'Üniversiteler', href: '/#universiteler' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Hakkımızda', href: '/#hakkimizda' },
+]
 
 interface NavBarProps {
   menuOpen: boolean
@@ -47,20 +53,21 @@ export default function NavBar({
         </button>
 
         {navLinks.map((link) => (
-          <a
-            key={link}
-            href="#"
+          <Link
+            key={link.href}
+            href={link.href}
             className="text-sm font-medium text-gray-800 hover:text-orange-500 transition-colors"
           >
-            {link}
-          </a>
+            {link.label}
+          </Link>
         ))}
 
-        {/* Search */}
-        <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          <Search size={15} strokeWidth={2} />
-          <span>Search</span>
-        </button>
+        <Link
+          href="/iletisim"
+          className="inline-flex items-center px-5 py-2 bg-[#f04420] hover:bg-[#d93a1a] transition-colors text-white text-sm font-semibold rounded-full"
+        >
+          İletişim
+        </Link>
 
         {/* Hamburger / Close */}
         <button

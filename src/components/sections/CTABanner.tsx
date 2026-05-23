@@ -22,22 +22,22 @@ export default function CTABanner() {
   }
 
   return (
-    <section className="relative bg-[#0a0a0a] overflow-hidden py-20 lg:py-32 px-4 sm:px-8">
+    <section className="relative bg-[#1c1c1c] overflow-hidden py-10 lg:py-16 px-4 sm:px-8 min-h-screen flex items-center">
 
       {/* Arka plan ambient glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full bg-[#3a2a1a]/30 blur-[120px]" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto flex flex-col items-center gap-10">
+      <div className="relative max-w-3xl mx-auto flex flex-col items-center gap-10">
 
         {/* ── Başlık ── */}
-        <h2 className="text-white text-center font-light tracking-tight leading-[1.1] text-[clamp(2.5rem,6vw,5rem)]">
+        <h2 className="text-[#f04420] text-center font-light tracking-tight leading-[1.1] text-[clamp(1.6rem,3.5vw,2.8rem)]">
           Hayallerindeki üniversiteye,<br />seninle ulaşıyoruz.
         </h2>
 
         {/* ── Ana kart ── */}
-        <div className="w-full rounded-2xl overflow-hidden border border-white/[0.06] bg-[#161616] flex flex-col lg:flex-row shadow-2xl">
+        <div className="w-full max-w-3xl rounded-2xl overflow-hidden border border-white/[0.06] bg-[#161616] flex flex-col lg:flex-row shadow-2xl">
 
           {/* Sol — Video */}
           <div
@@ -110,7 +110,7 @@ export default function CTABanner() {
         </div>
 
         {/* ── Alt şerit ── */}
-        <div className="w-full rounded-xl bg-[#161616] border border-white/[0.06] px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="w-full max-w-3xl rounded-xl bg-[#161616] border border-white/[0.06] px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-white/60 text-sm">
             Uzmanlarımızla iletişime geçin ve canlı bir danışmanlık görüşmesi yapın.
           </p>
