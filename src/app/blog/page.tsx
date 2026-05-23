@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 
 export const metadata = {
   title: 'Blog | Portal Yurtdışı',
-  description: 'Rusya'da eğitim, burs ve kampüs hayatına dair güncel yazılar.',
+  description: "Rusya'da eğitim, burs ve kampüs hayatına dair güncel yazılar.",
 }
 
 export default async function BlogPage() {
