@@ -35,15 +35,19 @@ const steps = [
 ]
 
 export default function HowWeWork() {
-  const outerRef     = useRef<HTMLDivElement>(null)
-  const sectionRef   = useRef<HTMLElement>(null)
-  const leftColRef   = useRef<HTMLDivElement>(null)
-  const centerRef   = useRef<HTMLDivElement>(null)
-  const fillRef     = useRef<HTMLDivElement>(null)
-  const circleRefs  = useRef<(HTMLDivElement | null)[]>([])
-  const imageRefs   = useRef<(HTMLDivElement | null)[]>([])
-  const stepRefs    = useRef<(HTMLDivElement | null)[]>([])
-  const contentRefs = useRef<(HTMLDivElement | null)[]>([])
+  const outerRef          = useRef<HTMLDivElement>(null)
+  const sectionRef        = useRef<HTMLElement>(null)
+  const leftColRef        = useRef<HTMLDivElement>(null)
+  const centerRef         = useRef<HTMLDivElement>(null)
+  const fillRef           = useRef<HTMLDivElement>(null)
+  const circleRefs        = useRef<(HTMLDivElement | null)[]>([])
+  const imageRefs         = useRef<(HTMLDivElement | null)[]>([])
+  const stepRefs          = useRef<(HTMLDivElement | null)[]>([])
+  const contentRefs       = useRef<(HTMLDivElement | null)[]>([])
+  // Mobile
+  const mobileStepsRef    = useRef<HTMLDivElement>(null)
+  const mobileFillRef     = useRef<HTMLDivElement>(null)
+  const mobileCircleRefs  = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
     const hh = document.querySelector('header')?.offsetHeight ?? 116
@@ -129,7 +133,22 @@ export default function HowWeWork() {
         }
       )
 
-      // ── 2. Per-step: content reveal + circle highlight ──
+      // ── 2. Mobile fill line — steps container'a bağlı ──
+      gsap.fromTo(mobileFillRef.current,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: mobileStepsRef.current,
+            start: 'top 85%',
+            end: 'bottom 85%',
+            scrub: 1,
+          },
+        }
+      )
+
+      // ── 3. Per-step: content reveal + circle highlight ──
       stepRefs.current.forEach((step, i) => {
         if (!step) return
 
@@ -141,15 +160,27 @@ export default function HowWeWork() {
           }
         )
 
-        // Circle aktif/pasif renk geçişi
+        // Desktop + mobil circle renk geçişi
         ScrollTrigger.create({
           trigger: step,
           start: 'top center',
           end: 'bottom center',
-          onEnter:     () => gsap.to(circleRefs.current[i], { borderColor: 'rgba(240,68,32,0.9)', duration: 0.3 }),
-          onLeave:     () => gsap.to(circleRefs.current[i], { borderColor: 'rgba(240,68,32,0.3)', duration: 0.3 }),
-          onEnterBack: () => gsap.to(circleRefs.current[i], { borderColor: 'rgba(240,68,32,0.9)', duration: 0.3 }),
-          onLeaveBack: () => gsap.to(circleRefs.current[i], { borderColor: 'rgba(240,68,32,0.3)', duration: 0.3 }),
+          onEnter:     () => {
+            gsap.to(circleRefs.current[i],       { borderColor: 'rgba(240,68,32,0.9)', duration: 0.3 })
+            gsap.to(mobileCircleRefs.current[i], { borderColor: 'rgba(240,68,32,0.9)', duration: 0.3 })
+          },
+          onLeave:     () => {
+            gsap.to(circleRefs.current[i],       { borderColor: 'rgba(240,68,32,0.3)', duration: 0.3 })
+            gsap.to(mobileCircleRefs.current[i], { borderColor: 'rgba(240,68,32,0.3)', duration: 0.3 })
+          },
+          onEnterBack: () => {
+            gsap.to(circleRefs.current[i],       { borderColor: 'rgba(240,68,32,0.9)', duration: 0.3 })
+            gsap.to(mobileCircleRefs.current[i], { borderColor: 'rgba(240,68,32,0.9)', duration: 0.3 })
+          },
+          onLeaveBack: () => {
+            gsap.to(circleRefs.current[i],       { borderColor: 'rgba(240,68,32,0.3)', duration: 0.3 })
+            gsap.to(mobileCircleRefs.current[i], { borderColor: 'rgba(240,68,32,0.3)', duration: 0.3 })
+          },
         })
       })
     }, sectionRef)
@@ -230,17 +261,51 @@ export default function HowWeWork() {
           </div>
 
           {/* ── RIGHT: scrolling content blocks ───────────────── */}
-          <div>
+          <div ref={mobileStepsRef} className="relative">
+
+            {/* Mobil sol rail */}
+            <div
+              className="lg:hidden absolute top-0 bottom-0"
+              style={{ left: '20px', width: '2px', zIndex: 0 }}
+            >
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: 'repeating-linear-gradient(to bottom, rgba(255,255,255,0.15) 0px, rgba(255,255,255,0.15) 6px, transparent 6px, transparent 14px)',
+                }}
+              />
+              <div
+                ref={mobileFillRef}
+                className="absolute top-0 w-full bg-[#f04420]"
+                style={{ height: '100%', transform: 'scaleY(0)', transformOrigin: 'top' }}
+              />
+            </div>
+
             {steps.map((step, i) => (
               <div
                 key={step.id}
                 ref={el => { stepRefs.current[i] = el }}
-                className="min-h-[90vh] flex flex-col justify-center py-20 lg:py-28"
+                className="relative min-h-[90vh] flex flex-col justify-center py-20 lg:py-28"
               >
+                {/* Mobil circle — içeriğin başı (py-20 = 80px) */}
+                <div
+                  ref={el => { mobileCircleRefs.current[i] = el }}
+                  className="lg:hidden absolute z-10 w-9 h-9 rounded-full bg-[#1c1c1c] flex items-center justify-center"
+                  style={{
+                    left: '20px',
+                    top: '80px',
+                    transform: 'translateX(-50%)',
+                    border: '1.5px solid rgba(240,68,32,0.35)',
+                  }}
+                >
+                  <span className="text-[11px] font-semibold text-[#f04420]">{step.id}</span>
+                </div>
+
                 {/* Content wrapper — animated by GSAP */}
                 <div
                   ref={el => { contentRefs.current[i] = el }}
                   style={{ opacity: 0 }}
+                  className="pl-12 lg:pl-0"
                 >
                   {/* Image placeholder */}
                   <div

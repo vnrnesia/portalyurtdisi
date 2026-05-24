@@ -215,13 +215,13 @@ export default function ScrollRevealSection() {
           </div>
 
           {/* ── Main content — pushed to bottom by spacer ── */}
-          <Container className="flex-1 flex flex-col px-8 lg:px-16 pb-10 lg:pb-14 overflow-hidden relative">
+          <Container className="flex-1 flex flex-col px-5 sm:px-8 lg:px-16 pt-6 lg:pt-0 pb-6 lg:pb-14 overflow-hidden relative">
 
-            {/* Spacer keeps title/cards at the bottom */}
-            <div className="flex-1" />
+            {/* Spacer: masaüstünde içeriği alta iter, mobilde gizli */}
+            <div className="hidden lg:block flex-1" />
 
             {/* Title */}
-            <h2 className="text-[clamp(1.8rem,5.2vw,7rem)] font-bold text-[#f04420] leading-[0.88] tracking-tight mb-7">
+            <h2 className="text-[clamp(1.4rem,5.2vw,7rem)] font-bold text-[#f04420] leading-[0.88] tracking-tight mb-4 lg:mb-7">
               {panel.title.map((line, li) => (
                 <div key={li} className="overflow-hidden">
                   <div
@@ -234,31 +234,35 @@ export default function ScrollRevealSection() {
               ))}
             </h2>
 
-            {/* Cards row */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4">
+            {/* Cards row — 3 kolon grid */}
+            <div className="grid grid-cols-3 gap-1.5 lg:gap-4">
               {panel.cards.map((card, ci) => {
                 const Icon = card.Icon
                 return (
                   <div
                     key={ci}
                     ref={el => { cardRefs.current[i * 3 + ci] = el }}
-                    className="bg-white/[0.06] rounded-2xl p-5 lg:p-6 border border-white/[0.08]"
+                    className="bg-white/[0.06] rounded-xl lg:rounded-2xl p-2.5 lg:p-6 border border-white/[0.08]"
                     style={{ opacity: 0 }}
                   >
-                    <Icon size={26} className="text-white/80" strokeWidth={1.5} />
-                    <h3 className="text-white text-sm font-semibold mt-4 leading-snug">
-                      {card.title}
-                    </h3>
-                    <p className="text-white/50 text-xs mt-2 leading-relaxed">
+                    {/* Mobil */}
+                    <div className="flex items-center gap-1.5 lg:hidden">
+                      <Icon size={12} className="text-white/70 shrink-0" strokeWidth={1.5} />
+                      <h3 className="text-white text-[9px] font-semibold leading-snug">{card.title}</h3>
+                    </div>
+                    <p className="text-white/45 text-[8.5px] mt-1.5 leading-relaxed line-clamp-3 lg:hidden">
                       {card.desc}
                     </p>
+                    {/* Masaüstü */}
+                    <Icon size={22} className="text-white/80 hidden lg:block" strokeWidth={1.5} />
+                    <h3 className="text-white text-sm font-semibold mt-4 leading-snug hidden lg:block">{card.title}</h3>
+                    <p className="text-white/50 text-xs mt-2 leading-relaxed hidden lg:block">{card.desc}</p>
                   </div>
                 )
               })}
             </div>
 
-            {/* Image placeholder — absolute right, parallelogram clip.
-                Replace the inner div with <Image> when ready. */}
+            {/* Image placeholder — absolute right, parallelogram clip */}
             <div
               className="hidden lg:block absolute right-0 top-0 bottom-0 w-[36%]"
               style={{ clipPath: 'polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%)' }}

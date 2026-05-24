@@ -62,6 +62,37 @@ const cities = [
   },
 ]
 
+function CityCard({ city, small, featured, stretch }: { city: typeof cities[0]; small?: boolean; featured?: boolean; stretch?: boolean }) {
+  return (
+    <Link
+      href={`/sehirler/${city.slug}`}
+      className="relative overflow-hidden rounded-xl block"
+      style={stretch ? { height: '100%' } : { aspectRatio: featured ? '16/7' : small ? '2/3' : '3/4' }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={city.img} alt={city.name} className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5">
+        {(featured || !small) && (
+          <p className="text-white/50 text-[9px] tracking-widest uppercase mb-0.5">{city.ru}</p>
+        )}
+        <p className={`text-white font-bold leading-tight ${small ? 'text-[11px]' : featured ? 'text-[22px]' : 'text-[15px]'}`}>
+          {city.name}
+        </p>
+        {(featured || !small) && (
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <GraduationCap size={10} className="text-white/50" />
+            <span className="text-white/70 text-[11px]">{city.unis} üniversite</span>
+          </div>
+        )}
+        {small && (
+          <p className="text-white/50 text-[9px] mt-0.5">{city.unis} üni</p>
+        )}
+      </div>
+    </Link>
+  )
+}
+
 export default function CitiesSection() {
   const [activeId, setActiveId]           = useState<string | null>('kazan')
   const [userHovering, setUserHovering]   = useState(false)
@@ -137,8 +168,8 @@ export default function CitiesSection() {
             </h2>
           </div>
 
-          <div className="flex items-end gap-8">
-            <p className="text-gray-500 text-[15px] leading-relaxed max-w-xs hidden lg:block">
+          <div className="hidden lg:flex items-end gap-8">
+            <p className="text-gray-500 text-[15px] leading-relaxed max-w-xs">
               5 farklı Rus şehrinde 14 partner üniversite,{' '}
               binlerce Türk öğrenci topluluğu seni bekliyor.
             </p>
@@ -163,10 +194,42 @@ export default function CitiesSection() {
 
       </Container>
 
-      {/* ── Full-width track ── */}
+      {/* ── Mobil grid (2-1 / full / 1-2 / full) ── */}
+      <Container className="lg:hidden px-8">
+        <div className="grid grid-cols-3 gap-2.5">
+          {/* Sıra 1: 2fr + 1fr */}
+          <div className="col-span-2"><CityCard city={cities[0]} /></div>
+          <div className="col-span-1 h-full"><CityCard city={cities[1]} stretch small /></div>
+          {/* Sıra 2: tam genişlik */}
+          <div className="col-span-3"><CityCard city={cities[3]} featured /></div>
+          {/* Sıra 3+4: Ekaterinburg + CTA sol, Nijniy Novgorod sağda 2 satır */}
+          <div className="col-span-1"><CityCard city={cities[2]} small /></div>
+          <div className="col-span-2 row-span-2"><CityCard city={cities[4]} stretch /></div>
+          <div className="col-span-1">
+            <Link
+              href="/iletisim"
+              className="relative overflow-hidden rounded-xl flex flex-col justify-between p-3 bg-[#f04420] h-full"
+              style={{ aspectRatio: '2/3' }}
+            >
+              <span className="text-white/60 text-[8px] font-semibold tracking-[0.2em] uppercase">Danışmanlık</span>
+              <div>
+                <p className="text-white font-bold text-[12px] leading-snug mb-2.5">
+                  Ücretsiz ön görüşme al
+                </p>
+                <span className="inline-flex items-center gap-1 bg-white text-[#f04420] text-[9px] font-bold px-2.5 py-1.5 rounded-full">
+                  Başla <ArrowRight size={8} strokeWidth={2.5} />
+                </span>
+              </div>
+            </Link>
+          </div>
+
+        </div>
+      </Container>
+
+      {/* ── Full-width track (masaüstü) ── */}
       <div
         ref={scrollRef}
-        className="overflow-x-auto [&::-webkit-scrollbar]:hidden px-8 lg:px-16"
+        className="hidden lg:block overflow-x-auto [&::-webkit-scrollbar]:hidden px-8 lg:px-16"
         style={{ scrollbarWidth: 'none', height: CARD_H }}
         onMouseEnter={() => setUserHovering(true)}
         onMouseLeave={() => { setUserHovering(false); setActiveId('kazan') }}

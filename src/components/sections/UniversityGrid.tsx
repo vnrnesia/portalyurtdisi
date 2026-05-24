@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import React from 'react'
 import gsap from 'gsap'
+import Link from 'next/link'
 import { Plus, X, Calendar, Users } from 'lucide-react'
 import Container from '@/components/ui/Container'
 
@@ -78,23 +79,24 @@ interface University {
   description: string
   accent: string
   photo: string
+  href: string
 }
 
 const UNIVERSITIES: University[] = [
-  { id: 'mgu',      name: 'Lomonosov Moskova Devlet Üniversitesi',           shortName: 'МГУ',     country: 'Rusya', flag: '🇷🇺', ranking: '126',     founded: 1755, students: '47,000', description: "Rusya'nın en köklü ve prestijli devlet üniversitesi.",                    accent: '#C8102E', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/%D0%9C%D0%93%D0%A3%2C_%D0%B2%D0%B8%D0%B4_%D1%81_%D0%B2%D0%BE%D0%B7%D0%B4%D1%83%D1%85%D0%B0.jpg/1280px-%D0%9C%D0%93%D0%A3%2C_%D0%B2%D0%B8%D0%B4_%D1%81_%D0%B2%D0%BE%D0%B7%D0%B4%D1%83%D1%85%D0%B0.jpg' },
-  { id: 'bauman',   name: 'Bauman Moskova Devlet Teknik Üniversitesi',       shortName: 'Bauman',  country: 'Rusya', flag: '🇷🇺', ranking: '298',     founded: 1830, students: '19,000', description: "Teknik bilimler ve mühendislikte Rusya'nın zirvesi.",                      accent: '#003087', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Moscow_MSTU_Bauman_main_building_asv2021-08.jpg/1280px-Moscow_MSTU_Bauman_main_building_asv2021-08.jpg' },
-  { id: 'rudn',     name: 'RUDN Üniversitesi',                               shortName: 'RUDN',    country: 'Rusya', flag: '🇷🇺', ranking: '242',     founded: 1960, students: '33,000', description: '160+ ülkeden öğrenciyle tam uluslararası bir kampüs.',                    accent: '#CE1126', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/%D0%A0%D0%A3%D0%94%D0%9D_2016.jpg/1280px-%D0%A0%D0%A3%D0%94%D0%9D_2016.jpg' },
-  { id: 'hse',      name: 'HSE Üniversitesi – Moskova',                      shortName: 'HSE',     country: 'Rusya', flag: '🇷🇺', ranking: '206',     founded: 1992, students: '22,000', description: "Ekonomi ve sosyal bilimlerde Rusya'nın lider üniversitesi.",              accent: '#FF6900', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/HSE_new_building_%282015-01-22%29_01.jpg/1280px-HSE_new_building_%282015-01-22%29_01.jpg' },
-  { id: 'mephi',    name: 'Moskova Ulusal Araştırma Nükleer Üniversitesi',   shortName: 'MEPhI',   country: 'Rusya', flag: '🇷🇺', ranking: '591',     founded: 1942, students: '7,000',  description: 'Nükleer enerji ve fizik alanında küresel otorite.',                      accent: '#1A5C2A', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D1%80%D0%BF%D1%83%D1%81_%D0%9C%D0%98%D0%A4%D0%98_%2821.03.2026%29.jpg/1280px-%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D1%80%D0%BF%D1%83%D1%81_%D0%9C%D0%98%D0%A4%D0%98_%2821.03.2026%29.jpg' },
-  { id: 'spbgu',    name: 'St. Petersburg Devlet Üniversitesi',              shortName: 'СПбГУ',   country: 'Rusya', flag: '🇷🇺', ranking: '265',     founded: 1724, students: '25,000', description: "Rusya'nın en eski üniversitesi, 1724'te Peter the Great kurdu.",          accent: '#8B0000', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Spb_Vasilievsky_Island_Twelve_Collegiums_asv2019-09.jpg/1280px-Spb_Vasilievsky_Island_Twelve_Collegiums_asv2019-09.jpg' },
-  { id: 'polytech', name: 'St.Petersburg Devlet Politeknik Üniversitesi',    shortName: 'SPbPU',   country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1899, students: '33,000', description: "Mühendislik ve teknolojide Rusya'nın öncü kurumu.",                      accent: '#003D7C', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B8%D0%BD%D1%81%D1%82%D0%B8%D1%82%D1%83%D1%82._%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B501.jpg/1280px-%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B8%D0%BD%D1%81%D1%82%D0%B8%D1%82%D1%83%D1%82._%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B501.jpg' },
-  { id: 'itmo',     name: 'ITMO Üniversitesi',                               shortName: 'ITMO',    country: 'Rusya', flag: '🇷🇺', ranking: '360',     founded: 1900, students: '13,000', description: 'Bilgisayar bilimi ve yapay zekada dünya genelinde tanınan merkez.',      accent: '#0077B6', photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/ITMO_University%27s_main_building%2C_August_2016.jpg/1280px-ITMO_University%27s_main_building%2C_August_2016.jpg" },
-  { id: 'urfu',     name: 'Ural Federal Üniversitesi',                       shortName: 'UrFU',    country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1920, students: '50,000', description: "Ural bölgesinin en büyük araştırma ve eğitim merkezi.",                  accent: '#002F6C', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Ural_State_Technical_University_%28August_2022%29_-_1.jpg/1280px-Ural_State_Technical_University_%28August_2022%29_-_1.jpg' },
-  { id: 'kfu',      name: 'Kazan Federal Üniversitesi (Rusça)',              shortName: 'КФУ',     country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1804, students: '52,000', description: "Türki halkların kültürel ortamında güçlü akademik program.",              accent: '#006B3C', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Kazan_Federal_University_building_08-2016.jpg/1280px-Kazan_Federal_University_building_08-2016.jpg' },
-  { id: 'kspeu',    name: 'Kazan Devlet Enerji Üniversitesi',                shortName: 'KSPEU',   country: 'Rusya', flag: '🇷🇺', ranking: '700+',    founded: 1968, students: '8,000',  description: 'Enerji, elektrik ve çevre mühendisliğinde uzmanlaşmış kurum.',          accent: '#E57200', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B3%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%83%D0%BD%D0%B8%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%82%D0%B5%D1%82_26_%D0%B0%D0%BF%D1%80%D0%B5%D0%BB%D1%8F_2013_%D0%B3%D0%BE%D0%B4%D0%B0.jpg/1280px-%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B3%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%83%D0%BD%D0%B8%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%82%D0%B5%D1%82_26_%D0%B0%D0%BF%D1%80%D0%B5%D0%BB%D1%8F_2013_%D0%B3%D0%BE%D0%B4%D0%B0.jpg' },
-  { id: 'kfuen',    name: 'Kazan Federal Üniversitesi (İngilizce)',          shortName: 'KFU EN',  country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1804, students: '52,000', description: "İngilizce program seçeneğiyle uluslararası öğrencilere tam açık.",        accent: '#007B7F', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Kazan_Federal_University_building_08-2016.jpg/1280px-Kazan_Federal_University_building_08-2016.jpg' },
-  { id: 'unn',      name: 'Nijniy Novgorod Lobaçevskiy Devlet Üniversitesi', shortName: 'UNN',    country: 'Rusya', flag: '🇷🇺', ranking: '501-550', founded: 1916, students: '30,000', description: "Matematikçi Lobaçevskiy'nin adını taşıyan köklü araştırma üniversitesi.", accent: '#A0001E', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Lobachevsky_University._Faculty_of_Philology_03.jpg/1280px-Lobachevsky_University._Faculty_of_Philology_03.jpg' },
-  { id: 'hsenn',    name: 'Nijniy Novgorod HSE Üniversitesi',                shortName: 'HSE NN',  country: 'Rusya', flag: '🇷🇺', ranking: '206',     founded: 1996, students: '2,700',  description: 'HSE ağının Nijniy Novgorod kampüsü — bilgisayar ve ekonomi odaklı.',   accent: '#FF6900', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/HSE_new_building_%282015-01-22%29_01.jpg/1280px-HSE_new_building_%282015-01-22%29_01.jpg' },
+  { id: 'mgu',      name: 'Lomonosov Moskova Devlet Üniversitesi',           shortName: 'МГУ',     country: 'Rusya', flag: '🇷🇺', ranking: '126',     founded: 1755, students: '47,000', description: "Rusya'nın en köklü ve prestijli devlet üniversitesi.",                    accent: '#C8102E', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/%D0%9C%D0%93%D0%A3%2C_%D0%B2%D0%B8%D0%B4_%D1%81_%D0%B2%D0%BE%D0%B7%D0%B4%D1%83%D1%85%D0%B0.jpg/1280px-%D0%9C%D0%93%D0%A3%2C_%D0%B2%D0%B8%D0%B4_%D1%81_%D0%B2%D0%BE%D0%B7%D0%B4%D1%83%D1%85%D0%B0.jpg', href: '/sehirler/moskova/mgu' },
+  { id: 'bauman',   name: 'Bauman Moskova Devlet Teknik Üniversitesi',       shortName: 'Bauman',  country: 'Rusya', flag: '🇷🇺', ranking: '298',     founded: 1830, students: '19,000', description: "Teknik bilimler ve mühendislikte Rusya'nın zirvesi.",                      accent: '#003087', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Moscow_MSTU_Bauman_main_building_asv2021-08.jpg/1280px-Moscow_MSTU_Bauman_main_building_asv2021-08.jpg', href: '/sehirler/moskova/bauman' },
+  { id: 'rudn',     name: 'RUDN Üniversitesi',                               shortName: 'RUDN',    country: 'Rusya', flag: '🇷🇺', ranking: '242',     founded: 1960, students: '33,000', description: '160+ ülkeden öğrenciyle tam uluslararası bir kampüs.',                    accent: '#CE1126', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/%D0%A0%D0%A3%D0%94%D0%9D_2016.jpg/1280px-%D0%A0%D0%A3%D0%94%D0%9D_2016.jpg', href: '/sehirler/moskova/rudn' },
+  { id: 'hse',      name: 'HSE Üniversitesi – Moskova',                      shortName: 'HSE',     country: 'Rusya', flag: '🇷🇺', ranking: '206',     founded: 1992, students: '22,000', description: "Ekonomi ve sosyal bilimlerde Rusya'nın lider üniversitesi.",              accent: '#FF6900', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/HSE_new_building_%282015-01-22%29_01.jpg/1280px-HSE_new_building_%282015-01-22%29_01.jpg', href: '/sehirler/moskova/hse' },
+  { id: 'kfu',      name: 'Kazan Federal Üniversitesi (Rusça)',              shortName: 'КФУ',     country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1804, students: '52,000', description: "Türki halkların kültürel ortamında güçlü akademik program.",              accent: '#006B3C', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Kazan_Federal_University_building_08-2016.jpg/1280px-Kazan_Federal_University_building_08-2016.jpg', href: '/sehirler/kazan/kfu' },
+  { id: 'spbgu',    name: 'St. Petersburg Devlet Üniversitesi',              shortName: 'СПбГУ',   country: 'Rusya', flag: '🇷🇺', ranking: '265',     founded: 1724, students: '25,000', description: "Rusya'nın en eski üniversitesi, 1724'te Peter the Great kurdu.",          accent: '#8B0000', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Spb_Vasilievsky_Island_Twelve_Collegiums_asv2019-09.jpg/1280px-Spb_Vasilievsky_Island_Twelve_Collegiums_asv2019-09.jpg', href: '/sehirler/saint-petersburg/spbgu' },
+  { id: 'polytech', name: 'St.Petersburg Devlet Politeknik Üniversitesi',    shortName: 'SPbPU',   country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1899, students: '33,000', description: "Mühendislik ve teknolojide Rusya'nın öncü kurumu.",                      accent: '#003D7C', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B8%D0%BD%D1%81%D1%82%D0%B8%D1%82%D1%83%D1%82._%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B501.jpg/1280px-%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B8%D0%BD%D1%81%D1%82%D0%B8%D1%82%D1%83%D1%82._%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B501.jpg', href: '/sehirler/saint-petersburg/spbpu' },
+  { id: 'itmo',     name: 'ITMO Üniversitesi',                               shortName: 'ITMO',    country: 'Rusya', flag: '🇷🇺', ranking: '360',     founded: 1900, students: '13,000', description: 'Bilgisayar bilimi ve yapay zekada dünya genelinde tanınan merkez.',      accent: '#0077B6', photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/ITMO_University%27s_main_building%2C_August_2016.jpg/1280px-ITMO_University%27s_main_building%2C_August_2016.jpg", href: '/sehirler/saint-petersburg/itmo' },
+  { id: 'urfu',     name: 'Ural Federal Üniversitesi',                       shortName: 'UrFU',    country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1920, students: '50,000', description: "Ural bölgesinin en büyük araştırma ve eğitim merkezi.",                  accent: '#002F6C', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Ural_State_Technical_University_%28August_2022%29_-_1.jpg/1280px-Ural_State_Technical_University_%28August_2022%29_-_1.jpg', href: '/sehirler/yekaterinburg/urfu' },
+  { id: 'mephi',    name: 'Moskova Ulusal Araştırma Nükleer Üniversitesi',   shortName: 'MEPhI',   country: 'Rusya', flag: '🇷🇺', ranking: '591',     founded: 1942, students: '7,000',  description: 'Nükleer enerji ve fizik alanında küresel otorite.',                      accent: '#1A5C2A', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D1%80%D0%BF%D1%83%D1%81_%D0%9C%D0%98%D0%A4%D0%98_%2821.03.2026%29.jpg/1280px-%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D1%80%D0%BF%D1%83%D1%81_%D0%9C%D0%98%D0%A4%D0%98_%2821.03.2026%29.jpg', href: '/sehirler/moskova/mephi' },
+  { id: 'kspeu',    name: 'Kazan Devlet Enerji Üniversitesi',                shortName: 'KSPEU',   country: 'Rusya', flag: '🇷🇺', ranking: '700+',    founded: 1968, students: '8,000',  description: 'Enerji, elektrik ve çevre mühendisliğinde uzmanlaşmış kurum.',          accent: '#E57200', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B3%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%83%D0%BD%D0%B8%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%82%D0%B5%D1%82_26_%D0%B0%D0%BF%D1%80%D0%B5%D0%BB%D1%8F_2013_%D0%B3%D0%BE%D0%B4%D0%B0.jpg/1280px-%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B3%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%83%D0%BD%D0%B8%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%82%D0%B5%D1%82_26_%D0%B0%D0%BF%D1%80%D0%B5%D0%BB%D1%8F_2013_%D0%B3%D0%BE%D0%B4%D0%B0.jpg', href: '/sehirler/kazan/kgeu' },
+  { id: 'kfuen',    name: 'Kazan Federal Üniversitesi (İngilizce)',          shortName: 'KFU EN',  country: 'Rusya', flag: '🇷🇺', ranking: '401-450', founded: 1804, students: '52,000', description: "İngilizce program seçeneğiyle uluslararası öğrencilere tam açık.",        accent: '#007B7F', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Kazan_Federal_University_building_08-2016.jpg/1280px-Kazan_Federal_University_building_08-2016.jpg', href: '/sehirler/kazan/kfu' },
+  { id: 'unn',      name: 'Nijniy Novgorod Lobaçevskiy Devlet Üniversitesi', shortName: 'UNN',    country: 'Rusya', flag: '🇷🇺', ranking: '501-550', founded: 1916, students: '30,000', description: "Matematikçi Lobaçevskiy'nin adını taşıyan köklü araştırma üniversitesi.", accent: '#A0001E', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Lobachevsky_University._Faculty_of_Philology_03.jpg/1280px-Lobachevsky_University._Faculty_of_Philology_03.jpg', href: '/sehirler/nijni-novgorod/nngu' },
+  { id: 'hsenn',    name: 'Nijniy Novgorod HSE Üniversitesi',                shortName: 'HSE NN',  country: 'Rusya', flag: '🇷🇺', ranking: '206',     founded: 1996, students: '2,700',  description: 'HSE ağının Nijniy Novgorod kampüsü — bilgisayar ve ekonomi odaklı.',   accent: '#FF6900', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/HSE_new_building_%282015-01-22%29_01.jpg/1280px-HSE_new_building_%282015-01-22%29_01.jpg', href: '/sehirler/nijni-novgorod/nngu' },
 ]
 
 const STATS = [
@@ -128,8 +130,8 @@ function StatsTicker() {
     <Container>
       <div className="border-y border-gray-100 flex h-[42px]">
         <div className="flex-shrink-0 flex items-center gap-2 px-5 border-r border-gray-100 bg-white">
-          <span className="text-orange-500 text-sm">✳</span>
-          <span className="text-[11px] font-semibold text-gray-400 tracking-[0.18em] uppercase whitespace-nowrap">
+          <span className="hidden lg:inline text-orange-500 text-sm">✳</span>
+          <span className="text-[11px] font-semibold tracking-[0.18em] uppercase whitespace-nowrap text-orange-500 lg:text-gray-400">
             Portal Yurtdışı
           </span>
         </div>
@@ -201,6 +203,8 @@ function UniCell({ uni, index, cellRefs, onExpand }: UniCellProps) {
 export default function UniversityGrid() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [userHovering, setUserHovering] = useState(false)
+  const [scrollTriggered, setScrollTriggered] = useState(false)
+  const kfuTriggerRef  = useRef<HTMLDivElement>(null)
   const containerRef   = useRef<HTMLDivElement>(null)
   const overlayRef     = useRef<HTMLDivElement>(null)
   const contentRef     = useRef<HTMLDivElement>(null)
@@ -210,6 +214,15 @@ export default function UniversityGrid() {
   const selectedIdRef  = useRef<string | null>(null)
 
   const selectedUni = UNIVERSITIES.find(u => u.id === selectedId) ?? null
+
+  // Mobile-specific refs & state
+  const [mobileSelectedId, setMobileSelectedId] = useState<string | null>(null)
+  const mobileContainerRef = useRef<HTMLDivElement>(null)
+  const mobileOverlayRef   = useRef<HTMLDivElement>(null)
+  const mobileContentRef   = useRef<HTMLDivElement>(null)
+  const mobileCellRefs     = useRef<(HTMLDivElement | null)[]>([])
+
+  const mobileSelectedUni = UNIVERSITIES.find(u => u.id === mobileSelectedId) ?? null
 
   // Preload all university photos on mount so they're cache-ready when cards open
   useEffect(() => {
@@ -283,6 +296,68 @@ export default function UniversityGrid() {
     })
   }, [])
 
+  const handleMobileExpand = useCallback((uni: University, idx: number) => {
+    const container = mobileContainerRef.current
+    const overlay   = mobileOverlayRef.current
+    const cell      = mobileCellRefs.current[idx]
+    if (!container || !overlay || !cell) return
+
+    const cRect = container.getBoundingClientRect()
+    const eRect = cell.getBoundingClientRect()
+
+    const relX  = eRect.left - cRect.left
+    const relY  = eRect.top  - cRect.top
+    const cellW = eRect.width
+    const cellH = eRect.height
+
+    const GAP = 4
+    const targetW = cellW * 2 + GAP
+    const targetH = cellH * 2 + GAP
+
+    const clampX = Math.min(Math.max(relX, 0), cRect.width  - targetW)
+    const clampY = Math.min(Math.max(relY, 0), cRect.height - targetH)
+
+    setMobileSelectedId(uni.id)
+
+    gsap.set(overlay, {
+      display: 'block',
+      x: relX, y: relY,
+      width: cellW, height: cellH,
+      borderRadius: 8,
+      opacity: 1, scale: 1,
+    })
+
+    gsap.to(overlay, {
+      x: clampX, y: clampY,
+      width: targetW, height: targetH,
+      duration: 0.42,
+      ease: 'power3.out',
+    })
+
+    if (mobileContentRef.current) {
+      gsap.fromTo(
+        mobileContentRef.current,
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.3, delay: 0.28, ease: 'power2.out' },
+      )
+    }
+  }, [])
+
+  const handleMobileClose = useCallback(() => {
+    const overlay = mobileOverlayRef.current
+    if (!overlay) return
+    gsap.to(overlay, {
+      scale: 0.94,
+      opacity: 0,
+      duration: 0.2,
+      ease: 'power2.in',
+      onComplete: () => {
+        setMobileSelectedId(null)
+        gsap.set(overlay, { display: 'none', scale: 1, opacity: 1 })
+      },
+    })
+  }, [])
+
   const runAutoExpand = useCallback(() => {
     const candidates = UNIVERSITIES.map((_, i) => i).filter(i => i !== lastAutoIdx.current)
     const idx = candidates[Math.floor(Math.random() * candidates.length)]
@@ -298,7 +373,7 @@ export default function UniversityGrid() {
   }, [handleClose, handleExpand])
 
   useEffect(() => {
-    if (userHovering) {
+    if (userHovering || scrollTriggered) {
       if (autoRef.current) clearInterval(autoRef.current)
       return
     }
@@ -311,34 +386,129 @@ export default function UniversityGrid() {
       clearTimeout(initial)
       if (autoRef.current) clearInterval(autoRef.current)
     }
-  }, [userHovering, runAutoExpand])
+  }, [userHovering, scrollTriggered, runAutoExpand])
+
+  // Scroll trigger: KFU açılsın
+  useEffect(() => {
+    const trigger = kfuTriggerRef.current
+    if (!trigger) return
+
+    const kfuIdx = UNIVERSITIES.findIndex(u => u.id === 'kfu')
+    const kfu = UNIVERSITIES[kfuIdx]
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setScrollTriggered(true)
+          observer.disconnect()
+          setTimeout(() => {
+            if (window.innerWidth >= 1024) {
+              handleExpand(kfu, kfuIdx)
+            } else {
+              handleMobileExpand(kfu, kfuIdx)
+            }
+          }, 300)
+        }
+      },
+      { threshold: 0.5, rootMargin: '0px 0px -15% 0px' },
+    )
+
+    observer.observe(trigger)
+    return () => observer.disconnect()
+  }, [handleExpand, handleMobileExpand])
 
   return (
     <section className="bg-white mt-16 py-16 lg:py-24">
       <StatsTicker />
+      <div ref={kfuTriggerRef} />
 
-      {/* Mobile: simple logo grid */}
-      <Container className="lg:hidden mt-8 overflow-hidden">
-        <div className="bg-gray-100 p-1 rounded-xl grid grid-cols-4 gap-1">
+      {/* Mobile: interactive logo grid */}
+      <Container className="lg:hidden mt-8">
+        <div className="bg-gray-100 p-1 rounded-xl overflow-hidden">
           {/* Info card */}
-          <div className="col-span-4 bg-gray-50 p-5 rounded-xl">
+          <div className="bg-gray-50 p-5 rounded-xl mb-1">
             <p className="text-[10px] font-semibold tracking-[0.2em] text-gray-400 uppercase mb-2">Keşfet</p>
             <p className="text-[0.95rem] font-semibold text-gray-900 leading-snug">
               Rusya&apos;nın önde gelen üniversitelerinde{' '}
               <span className="text-orange-500">eğitim fırsatlarını</span> keşfet.
             </p>
           </div>
-          {UNIVERSITIES.map(uni => (
-            <div
-              key={uni.id}
-              className="relative bg-white rounded-lg overflow-hidden flex items-center justify-center"
-              style={{ height: 90 }}
-            >
-              <div className="flex items-center justify-center p-2">
-                {logos[uni.id]?.('#c0c0c0', false)}
+
+          {/* Cells + overlay container */}
+          <div
+            ref={mobileContainerRef}
+            className="relative grid grid-cols-2 gap-1"
+          >
+            {UNIVERSITIES.map((uni, i) => (
+              <div
+                key={uni.id}
+                ref={el => { mobileCellRefs.current[i] = el }}
+                className="relative bg-white rounded-lg overflow-hidden flex items-center justify-center cursor-pointer"
+                style={{ height: 120 }}
+                onClick={() => handleMobileExpand(uni, i)}
+              >
+                <div className="flex items-center justify-center p-2">
+                  {logos[uni.id]?.(uni.accent, true)}
+                </div>
               </div>
+            ))}
+
+            {/* Mobile overlay */}
+            <div
+              ref={mobileOverlayRef}
+              className="absolute z-20 overflow-hidden shadow-2xl"
+              style={{ display: 'none' }}
+            >
+              {mobileSelectedUni && (
+                <div
+                  ref={mobileContentRef}
+                  className="w-full h-full flex flex-col p-4 text-white relative overflow-hidden"
+                  style={{
+                    backgroundColor: mobileSelectedUni.accent,
+                    backgroundImage: `url(${mobileSelectedUni.photo})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.35) 100%)' }} />
+                  <div className="relative z-10 flex items-center justify-between">
+                    <button
+                      onClick={handleMobileClose}
+                      className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/35 transition-colors flex items-center justify-center"
+                      aria-label="Kapat"
+                    >
+                      <X size={13} strokeWidth={2} />
+                    </button>
+                  </div>
+                  <div className="mt-auto relative z-10">
+                    <p className="text-[2.2rem] font-extralight leading-none tabular-nums">
+                      #{mobileSelectedUni.ranking}
+                    </p>
+                    <p className="text-[10px] opacity-50 mt-0.5 uppercase tracking-wider">Dünya Sıralaması</p>
+                  </div>
+                  <div className="mt-2 relative z-10">
+                    <h3 className="text-[13px] font-semibold leading-snug">{mobileSelectedUni.name}</h3>
+                    <p className="text-[11px] opacity-65 mt-1 leading-relaxed">{mobileSelectedUni.description}</p>
+                  </div>
+                  <div className="flex items-center gap-3 mt-3 pt-2 border-t border-white/20 text-[11px] relative z-10">
+                    <span className="flex items-center gap-1 opacity-60">
+                      <Calendar size={10} /> {mobileSelectedUni.founded}
+                    </span>
+                    <span className="flex items-center gap-1 opacity-60">
+                      <Users size={10} /> {mobileSelectedUni.students}
+                    </span>
+                    <Link href={mobileSelectedUni.href} className="ml-auto px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors font-medium">
+                      İncele →
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
+
+            {mobileSelectedId && (
+              <div className="absolute inset-0 z-10" onClick={handleMobileClose} />
+            )}
+          </div>
         </div>
       </Container>
 
@@ -437,12 +607,12 @@ export default function UniversityGrid() {
                   <span className="flex items-center gap-1 opacity-60">
                     <Users size={10} /> {selectedUni.students}
                   </span>
-                  <a
-                    href="#"
+                  <Link
+                    href={selectedUni.href}
                     className="ml-auto px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors font-medium"
                   >
-                    Başvur →
-                  </a>
+                    İncele →
+                  </Link>
                 </div>
               </div>
             )}

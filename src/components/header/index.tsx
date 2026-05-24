@@ -45,7 +45,9 @@ export default function Header() {
           fullMenuOpen={fullMenuOpen}
           onHamburgerClick={() => setFullMenuOpen((p) => !p)}
         />
-        <AnnouncementTicker />
+        <div className="hidden lg:block">
+          <AnnouncementTicker />
+        </div>
         <MegaMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       </header>
       <FullScreenMenu isOpen={fullMenuOpen} onClose={() => setFullMenuOpen(false)} />
