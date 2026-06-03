@@ -37,7 +37,7 @@ const panels: Panel[] = [
     id: '01',
     label: 'Ülke ve Üniversite Seçimi',
     title: ['Doğru Ülke ve', 'Üniversite Seçimi'],
-    bg: '#1c1c1c',
+    bg: '#ffffff',
     labelColor: '#f04420',
     cards: [
       { Icon: GraduationCap, title: 'Akademik Analiz', desc: 'Öğrencinin akademik geçmişi, kariyer hedefleri ve sosyal yaşam beklentisi değerlendirilir.' },
@@ -49,7 +49,7 @@ const panels: Panel[] = [
     id: '02',
     label: 'Evrak Hazırlık ve Tercüme',
     title: ['Evrak Hazırlık ve', 'Resmi Tercüme Süreci'],
-    bg: '#222222',
+    bg: '#f7f7f7',
     labelColor: '#f04420',
     cards: [
       { Icon: FileText, title: 'Resmi Belgeler', desc: 'Diploma, transkript, pasaport, fotoğraf, sağlık raporu ve gerekli tüm belgeler eksiksiz hazırlanır.' },
@@ -61,7 +61,7 @@ const panels: Panel[] = [
     id: '03',
     label: 'Başvuru ve Davetiye Süreci',
     title: ['Üniversite Başvurusu', 've Davetiye Süreci'],
-    bg: '#282828',
+    bg: '#efefef',
     labelColor: '#f04420',
     cards: [
       { Icon: Send, title: 'Başvuru Takibi', desc: 'Üniversite başvurusu yapılır, süreç titizlikle takip edilir ve resmi kayıt işlemleri başlatılır.' },
@@ -73,7 +73,7 @@ const panels: Panel[] = [
     id: '04',
     label: 'Vize İşlemi',
     title: ['Vize', 'İşlemi'],
-    bg: '#2e2e2e',
+    bg: '#e7e7e7',
     labelColor: '#f04420',
     cards: [
       { Icon: ClipboardList, title: 'Evrak Listesi', desc: 'Başarılı kabul ve davetiye alındıktan sonra konsolosluk için gerekli evrak listesi hazırlanır.' },
@@ -85,7 +85,7 @@ const panels: Panel[] = [
     id: '05',
     label: 'Varış ve Adaptasyon Süreci',
     title: ["Rusya'ya Varış ve", 'Adaptasyon Süreci'],
-    bg: '#343434',
+    bg: '#dfdfdf',
     labelColor: '#f04420',
     cards: [
       { Icon: Plane, title: 'Uçuş Organizasyonu', desc: 'Uygun tarihte uçak bileti organizasyonu yapılır, İstanbul Havalimanı\'ndan danışman eşliğinde kafileli uçuş gerçekleştirilir.' },
@@ -203,7 +203,7 @@ export default function ScrollRevealSection() {
         >
           {/* ── Label strip — stacks at top as panels accumulate ── */}
           <div
-            className="flex items-center justify-center shrink-0 border-b border-white/[0.08]"
+            className="flex items-center justify-center shrink-0 border-b border-black/[0.08]"
             style={{ height: LABEL_H }}
           >
             <span
@@ -242,21 +242,21 @@ export default function ScrollRevealSection() {
                   <div
                     key={ci}
                     ref={el => { cardRefs.current[i * 3 + ci] = el }}
-                    className="bg-white/[0.06] rounded-xl lg:rounded-2xl p-2.5 lg:p-6 border border-white/[0.08]"
+                    className="bg-black/[0.04] rounded-xl lg:rounded-2xl p-2.5 lg:p-6 border border-black/[0.07]"
                     style={{ opacity: 0 }}
                   >
                     {/* Mobil */}
                     <div className="flex items-center gap-1.5 lg:hidden">
-                      <Icon size={12} className="text-white/70 shrink-0" strokeWidth={1.5} />
-                      <h3 className="text-white text-[9px] font-semibold leading-snug">{card.title}</h3>
+                      <Icon size={12} className="text-gray-500 shrink-0" strokeWidth={1.5} />
+                      <h3 className="text-gray-800 text-[9px] font-semibold leading-snug">{card.title}</h3>
                     </div>
-                    <p className="text-white/45 text-[8.5px] mt-1.5 leading-relaxed line-clamp-3 lg:hidden">
+                    <p className="text-gray-500 text-[8.5px] mt-1.5 leading-relaxed line-clamp-3 lg:hidden">
                       {card.desc}
                     </p>
                     {/* Masaüstü */}
-                    <Icon size={22} className="text-white/80 hidden lg:block" strokeWidth={1.5} />
-                    <h3 className="text-white text-sm font-semibold mt-4 leading-snug hidden lg:block">{card.title}</h3>
-                    <p className="text-white/50 text-xs mt-2 leading-relaxed hidden lg:block">{card.desc}</p>
+                    <Icon size={22} className="text-gray-600 hidden lg:block" strokeWidth={1.5} />
+                    <h3 className="text-gray-900 text-sm font-semibold mt-4 leading-snug hidden lg:block">{card.title}</h3>
+                    <p className="text-gray-500 text-xs mt-2 leading-relaxed hidden lg:block">{card.desc}</p>
                   </div>
                 )
               })}
@@ -267,7 +267,7 @@ export default function ScrollRevealSection() {
               className="hidden lg:block absolute right-0 top-0 bottom-0 w-[36%]"
               style={{ clipPath: 'polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%)' }}
             >
-              <div className="h-full w-full" style={{ backgroundColor: 'rgba(255,255,255,0.04)' }} />
+              <div className="h-full w-full" style={{ backgroundColor: 'rgba(0,0,0,0.04)' }} />
             </div>
 
           </Container>

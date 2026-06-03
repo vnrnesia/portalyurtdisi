@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { GraduationCap, Users, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { GraduationCap, Users, ArrowRight } from 'lucide-react'
 import Container from '@/components/ui/Container'
 
 const COLLAPSED_W = 130
@@ -147,10 +147,6 @@ export default function CitiesSection() {
     }
   }, [userHovering, pickRandom])
 
-  const scrollTrack = (dir: 'prev' | 'next') => {
-    scrollRef.current?.scrollBy({ left: dir === 'next' ? 360 : -360, behavior: 'smooth' })
-  }
-
   return (
     <section className="bg-white py-20 lg:py-28">
       <Container className="px-8 lg:px-16">
@@ -168,28 +164,10 @@ export default function CitiesSection() {
             </h2>
           </div>
 
-          <div className="hidden lg:flex items-end gap-8">
-            <p className="text-gray-500 text-[15px] leading-relaxed max-w-xs">
-              5 farklı Rus şehrinde 14 partner üniversite,{' '}
-              binlerce Türk öğrenci topluluğu seni bekliyor.
-            </p>
-            <div className="flex gap-2 shrink-0">
-              <button
-                onClick={() => scrollTrack('prev')}
-                className="w-11 h-11 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors"
-                aria-label="Önceki"
-              >
-                <ChevronLeft size={17} />
-              </button>
-              <button
-                onClick={() => scrollTrack('next')}
-                className="w-11 h-11 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors"
-                aria-label="Sonraki"
-              >
-                <ChevronRight size={17} />
-              </button>
-            </div>
-          </div>
+          <p className="hidden lg:block text-gray-500 text-[15px] leading-relaxed max-w-xs">
+            5 farklı Rus şehrinde 14 partner üniversite,{' '}
+            binlerce Türk öğrenci topluluğu seni bekliyor.
+          </p>
         </div>
 
       </Container>
