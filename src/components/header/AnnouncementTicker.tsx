@@ -4,12 +4,11 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
 const announcements = [
-  'Registration ends on May 10, 2025',
-  'Result for Semester 4 will be declared on May 8, 2025',
-  'The university will remain closed on May 12, 2025',
-  'New courses available for Fall 2025 enrollment',
-  'Campus orientation week starts May 15, 2025',
-  'Scholarship applications open until June 1, 2025',
+  '📢 Ücretsiz Üniversite Uygunluk Analizi',
+  '🇷🇺 Rusya 2026 Başvuruları Açıldı',
+  '🇪🇺 Schengen Multi Vize Başvuruları Devam Ediyor',
+  '🇪🇸 İspanya Dil Okullarında Erken Kayıt İndirimi',
+  '🤝 Portal Partner Network Başvuruları Başladı',
 ]
 
 export default function AnnouncementTicker() {
@@ -42,11 +41,11 @@ export default function AnnouncementTicker() {
   const items = [...announcements, ...announcements]
 
   return (
-    <div className="bg-white border-t border-gray-200">
+    <div className="bg-[#f04420]">
       <div className="flex items-center h-9">
         {/* Sabit sol metin */}
-        <div className="flex-shrink-0 px-6 text-[13px] font-bold text-gray-900 border-r border-gray-300 h-full flex items-center">
-          Apply / Admitted? Let&apos;s make it official!
+        <div className="flex-shrink-0 px-6 text-[13px] font-extrabold text-black border-r border-black/20 h-full flex items-center">
+          Başvurular Açıldı | 2026 Kontenjanlarını İnceleyin
         </div>
 
         {/* Ticker alanı — kenarlar blur ile maskeli */}
@@ -65,8 +64,8 @@ export default function AnnouncementTicker() {
           >
             {items.map((item, i) => (
               <span key={i} className="inline-flex items-center">
-                <span className="text-[13px] text-gray-700 px-1">{item}</span>
-                <span className="mx-3 text-gray-400 text-[10px] select-none">●</span>
+                <span className="text-[13px] font-semibold text-black px-1">{item}</span>
+                <span className="mx-3 text-black/40 text-[10px] select-none">●</span>
               </span>
             ))}
           </div>

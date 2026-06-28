@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Play, Volume2, VolumeX } from 'lucide-react'
 import Container from '@/components/ui/Container'
 
 interface Testimonial {
@@ -72,6 +72,16 @@ export default function Testimonials() {
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(true)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const [soundOn, setSoundOn] = useState(false)
+
+  // Otomatik oynayan ilk YouTube videosu
+  const firstYtId = testimonials.find(t => t.youtubeId)?.id ?? null
+  // Hover edilen kartta video varsa onu, yoksa otomatik videoyu oynat
+  const hoverHasYt = hoveredId != null && !!testimonials.find(t => t.id === hoveredId)?.youtubeId
+  const playingId = hoverHasYt ? hoveredId : firstYtId
+
+  const ytSrc = (id: string) =>
+    `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=${soundOn ? 0 : 1}&controls=0&loop=1&playlist=${id}&modestbranding=1&playsinline=1&rel=0`
 
   const updateButtons = useCallback(() => {
     const el = trackRef.current
@@ -107,14 +117,14 @@ export default function Testimonials() {
           <div>
             <div className="mb-5">
               <p className="text-[10px] font-semibold tracking-[0.32em] uppercase text-gray-500 mb-2">
-                YouTube İçeriklerimiz
+                Müşteri Memnuniyeti
               </p>
               <div className="relative h-px bg-gray-300 w-full">
                 <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
               </div>
             </div>
             <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-bold text-gray-900 leading-tight tracking-tight">
-              Gerçek Hikayeler,<br />Gerçek Sonuçlar.
+              Öğrenci Deneyimleri &amp;<br />Gerçek Sonuçlar
             </h2>
           </div>
 
@@ -123,7 +133,7 @@ export default function Testimonials() {
             <div className="flex items-start gap-4">
               <div className="w-8 h-px bg-gray-400 mt-3 shrink-0" />
               <p className="text-gray-500 text-[14px] leading-relaxed">
-                Gerçek öğrenci deneyimleri, üniversite ziyaretleri ve birebir süreç videoları yaptığımız işi şeffaf şekilde ortaya koyuyoruz.
+                Yurtdışı eğitim sürecinde en önemli unsur güvendir. Biz sadece anlatmıyoruz — öğrencilerimizin başvuru, kabul ve vize süreçlerini YouTube videoları ile şeffaf şekilde paylaşıyoruz.
               </p>
             </div>
             <div className="flex gap-2 shrink-0">
@@ -162,75 +172,68 @@ export default function Testimonials() {
               className="flex-shrink-0 w-[82vw] sm:w-[60vw] lg:w-[calc(50%-12px)] flex flex-col"
             >
               {/* Card */}
-              <a
-                href={t.youtubeId ? `https://www.youtube.com/watch?v=${t.youtubeId}` : undefined}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-5 select-none block"
-                style={{ cursor: t.youtubeId ? 'pointer' : 'default' }}
+              <div
+                className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-5 select-none block bg-black"
                 onMouseEnter={() => setHoveredId(t.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {/* Student photo (default) */}
+                {/* Banner — YouTube thumbnail (video varsa) ya da öğrenci fotoğrafı */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={t.photo}
+                  src={t.youtubeId ? `https://img.youtube.com/vi/${t.youtubeId}/maxresdefault.jpg` : t.photo}
                   alt={t.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-all duration-500"
-                  style={{
-                    transform: hoveredId === t.id && t.youtubeId ? 'scale(1.04)' : 'scale(1)',
-                    opacity: hoveredId === t.id && t.youtubeId ? 0 : 1,
-                  }}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+                  style={{ transform: hoveredId === t.id && t.youtubeId ? 'scale(1.04)' : 'scale(1)' }}
                 />
 
-                {/* YouTube thumbnail on hover */}
-                {t.youtubeId && (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={`https://img.youtube.com/vi/${t.youtubeId}/maxresdefault.jpg`}
-                    alt={`${t.name} video`}
-                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-                    style={{ opacity: hoveredId === t.id ? 1 : 0 }}
+                {/* Oynayan video (tek seferde tek iframe) */}
+                {t.youtubeId && playingId === t.id && (
+                  <iframe
+                    key={`${t.id}-${soundOn}`}
+                    src={ytSrc(t.youtubeId)}
+                    title={`${t.name} video`}
+                    allow="autoplay; encrypted-media"
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                    style={{ border: 0 }}
                   />
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10 pointer-events-none" />
 
-                {/* Play button — shown when youtubeId is set */}
-                {t.youtubeId && (
-                  <div
-                    className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
-                    style={{ opacity: hoveredId === t.id ? 1 : 0.6 }}
+                {/* Ses butonu — oynayan kartta */}
+                {t.youtubeId && playingId === t.id && (
+                  <button
+                    type="button"
+                    onClick={() => setSoundOn(s => !s)}
+                    aria-label={soundOn ? 'Sesi kapat' : 'Sesi aç'}
+                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/45 hover:bg-black/65 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
                   >
-                    <div className="w-14 h-14 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center transition-transform duration-200"
-                      style={{ transform: hoveredId === t.id ? 'scale(1.15)' : 'scale(1)' }}
-                    >
+                    {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                  </button>
+                )}
+
+                {/* Play göstergesi — video oynamıyorken */}
+                {t.youtubeId && playingId !== t.id && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-80">
+                    <div className="w-14 h-14 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center">
                       <Play size={22} className="text-white ml-1" fill="white" />
                     </div>
                   </div>
                 )}
 
-                {/* Name + university — top left */}
-                <div className="absolute top-5 left-5 right-20">
+                {/* Ad + üniversite — sol üst */}
+                <div className="absolute top-5 left-5 right-20 pointer-events-none">
                   <p className="text-white font-semibold text-base leading-snug">{t.name}</p>
                   <p className="text-white/65 text-sm mt-0.5">{t.university} · {t.country}</p>
                 </div>
 
-                {/* Program tag — bottom left */}
-                <div className="absolute bottom-5 left-5">
-                  <span className="text-[11px] font-medium text-white/60 tracking-wide uppercase">
+                {/* Program etiketi — sol alt */}
+                <div className="absolute bottom-5 left-5 pointer-events-none">
+                  <span className="text-[11px] font-medium text-white/70 tracking-wide uppercase">
                     {t.program}
                   </span>
                 </div>
-
-                {/* Decorative initial */}
-                <div
-                  className="absolute -bottom-4 right-4 text-white/[0.07] font-black leading-none pointer-events-none"
-                  style={{ fontSize: 'clamp(5rem,12vw,9rem)' }}
-                >
-                  {t.name[0]}
-                </div>
-              </a>
+              </div>
 
               {/* Quote */}
               <p className="text-gray-600 text-[15px] leading-relaxed">

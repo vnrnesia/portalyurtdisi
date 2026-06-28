@@ -1,8 +1,16 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Plus, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import gsap from 'gsap'
+
+const CONSULTANTS = [
+  { name: 'Furkan Ercan', photo: '/danismanlar/furkanercan.png' },
+  { name: 'Fırat Böler', photo: '/danismanlar/firatboler.png' },
+  { name: 'Sencer Giray Düzenli', photo: '/danismanlar/sencergirayduzenli.png' },
+  { name: 'Ferdi Ebinç', photo: '/danismanlar/ferdiebinc.png' },
+]
 
 const FAQS = [
   {
@@ -76,6 +84,32 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: { q: string; a: string 
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const flipRef = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+  const nameRef = useRef<HTMLSpanElement>(null)
+  const idxRef = useRef(0)
+
+  // Danışman 4 sn'de bir kendi etrafında dönerek değişir; isim mask animasyonu ile geçer
+  useEffect(() => {
+    const id = setInterval(() => {
+      const next = (idxRef.current + 1) % CONSULTANTS.length
+      const c = CONSULTANTS[next]
+      idxRef.current = next
+
+      // Foto — 3D flip (kendi etrafında döner, kenara gelince görsel değişir)
+      gsap.timeline()
+        .to(flipRef.current, { rotateY: 90, duration: 0.34, ease: 'power2.in' })
+        .add(() => { if (imgRef.current) imgRef.current.src = c.photo })
+        .fromTo(flipRef.current, { rotateY: -90 }, { rotateY: 0, duration: 0.42, ease: 'power2.out' })
+
+      // İsim — mask animasyonu (eski yukarı çıkar, yeni alttan girer)
+      gsap.timeline()
+        .to(nameRef.current, { yPercent: -120, duration: 0.3, ease: 'power2.in' })
+        .add(() => { if (nameRef.current) nameRef.current.textContent = c.name })
+        .fromTo(nameRef.current, { yPercent: 120 }, { yPercent: 0, duration: 0.45, ease: 'power3.out' })
+    }, 4000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <section className="bg-[#f9f9f7] py-20 lg:py-28">
@@ -110,16 +144,29 @@ export default function FAQSection() {
             {/* Consultant card */}
             <div className="mt-8 lg:mt-14">
               <p className="text-gray-500 text-[13px] leading-relaxed mb-6">
-                Şimdi ücretsiz bir görüşme planlayıp, yurtdışı<br />eğitiminde ilk adımı atabilirsin
+                Uzman danışmanlarımızdan ücretsiz bir ön görüşme planlayıp<br />yurtdışı hayalin için ilk adımı atabilirsin
               </p>
               <div className="flex items-center gap-4">
-                {/* Photo placeholder */}
-                <div className="w-14 h-14 rounded-xl bg-gray-200 shrink-0 overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/bahar.jpg" alt="Bahar Kahraman" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                {/* Photo — 4 sn'de bir kendi etrafında dönerek değişir */}
+                <div className="w-14 h-14 rounded-xl bg-gray-200 shrink-0 overflow-hidden" style={{ perspective: 800 }}>
+                  <div ref={flipRef} className="w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      ref={imgRef}
+                      src={CONSULTANTS[0].photo}
+                      alt="Danışman"
+                      className="w-full h-full object-cover"
+                      onError={e => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
+                    />
+                  </div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-bold text-gray-900">Bahar Kahraman</p>
+                  {/* İsim — mask animasyonu için overflow-hidden sarmalayıcı */}
+                  <span className="block overflow-hidden h-[19px]">
+                    <span ref={nameRef} className="block text-[14px] font-bold text-gray-900 leading-[19px] will-change-transform">
+                      {CONSULTANTS[0].name}
+                    </span>
+                  </span>
                   <p className="text-[12px] text-gray-400">Öğrenci Danışmanı</p>
                 </div>
                 <Link

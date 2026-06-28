@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" className={`${poppins.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-[family-name:var(--font-poppins)]">
+    <html lang="tr" className={`${manrope.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col font-[family-name:var(--font-manrope)]">
         {children}
       </body>
     </html>
