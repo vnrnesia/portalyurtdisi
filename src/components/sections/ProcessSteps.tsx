@@ -18,25 +18,25 @@ const steps: Step[] = [
     short: 'Profil Analizi',
     title: 'Profil Analizi ve Hedef Belirleme',
     desc: 'Akademik geçmişinizi, bütçenizi, dil seviyenizi ve kariyer hedeflerinizi analiz ederek size en uygun ülke, üniversite veya vize kategorisini belirliyoruz.',
-    img: '/ogrenciler/aybars.png',
+    img: '/asamalar/1.webp',
   },
   {
     short: 'Yol Haritası',
     title: 'Yol Haritası ve Başvurular',
     desc: 'Size özel hazırlanan yol haritası doğrultusunda gerekli evrakları hazırlıyor, resmi çevirileri gerçekleştiriyor ve üniversite veya vize başvurularınızı yapıyoruz.',
-    img: '/ogrenciler/omer.png',
+    img: '/asamalar/2.webp',
   },
   {
     short: 'Kabul & Vize',
     title: 'Kabul, Vize ve Ulaşım Planlaması',
     desc: 'Kabul mektubu veya ön onay sonrasında vize başvurunuzu yönetiyor, konaklama seçeneklerini planlıyor ve uçuş organizasyonlarında destek sağlıyoruz.',
-    img: '/ogrenciler/oyku.png',
+    img: '/asamalar/3.webp',
   },
   {
     short: 'Varış & Oryantasyon',
     title: 'Varış ve Oryantasyon',
     desc: 'Ülkeye girişinizden sonra havalimanı karşılama, üniversite kayıt işlemleri, banka hesabı açılışı, SIM kart temini ve şehir oryantasyonu konularında yanınızda oluyoruz.',
-    img: '/ogrenciler/toprak.png',
+    img: '/asamalar/4.webp',
   },
 ]
 
@@ -47,7 +47,7 @@ export default function ProcessSteps() {
 
   return (
     <section className="bg-[#f5f4f2] py-20 lg:py-28">
-      <div className="max-w-[1320px] mx-auto px-34">
+      <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
         <div className="grid lg:grid-cols-[0.85fr_1.6fr] gap-12 lg:gap-16 items-center">
 
           {/* SOL — başlık + sosyal kanıt + CTA */}

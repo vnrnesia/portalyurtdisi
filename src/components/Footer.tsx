@@ -48,8 +48,8 @@ export default function Footer() {
           {/* Left: heading + newsletter */}
           <div>
             <div className="mb-6">
-              <h2 className="text-[clamp(1.5rem,2.5vw,2.2rem)] font-bold text-gray-900 leading-tight tracking-tight">
-                Geleceğine açılan kapı:<br />Portal Yurtdışı eğitim.
+              <h2 className="text-[clamp(1.5rem,2.5vw,2.2rem)] font-semibold text-gray-900 leading-tight tracking-tight">
+                Geleceğinize açılan kapı:<br />Eğitim ve vize sürecinizi Portal ile planlayın.
               </h2>
             </div>
 
@@ -74,18 +74,18 @@ export default function Footer() {
                   type="submit"
                   className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-[#f04420] hover:bg-[#d93a1a] transition-colors text-white text-[12px] font-bold tracking-[0.15em] uppercase rounded-lg"
                 >
-                  Email Bültenimize Katıl →
+                  Fırsatlardan İlk Siz Haberdar Olun →
                 </button>
               </form>
             )}
 
             <p className="text-gray-600 text-[12px] font-extrabold mt-4 leading-relaxed">
-              Göndererek,{' '}
-              <Link href="#" className="text-[#f04420] hover:underline">Kullanım Koşulları&apos;mızı</Link>
+              Göndererek{' '}
+              <Link href="#" className="text-[#f04420] hover:underline">KVKK ve Gizlilik Politikamızı</Link>
               {' '}kabul etmiş olursunuz.
             </p>
             <p className="text-gray-600 text-[12px] font-extrabold mt-1">
-              * Spam yok, sadece harika güncellemeler.
+              Spam yok, yalnızca size özel eğitim ve vize fırsatları.
             </p>
           </div>
 
@@ -156,19 +156,44 @@ export default function Footer() {
       {/* ── Frame 18: Branding + Contact ── */}
       <div>
         <div className="max-w-7xl mx-auto px-6 lg:px-16 pt-10 pb-0">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-24 items-end">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-24 items-start">
 
-            {/* Left: tagline + logo + credit + copyright */}
+            {/* Left: iletişim + tagline + logo + credit + copyright */}
             <div className="flex flex-col gap-6 pb-10">
-              {/* Tagline */}
+
+              {/* İletişim */}
               <div>
-                <div className="relative h-px bg-gray-300 mb-3">
+                <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">İletişim</p>
+                <div className="relative h-px bg-gray-300 mb-4">
                   <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
                 </div>
-                <p className="text-[14px] font-extrabold text-gray-600 leading-snug tracking-wide">
-                  Portal – Yurtdışı eğitime açılan güvenli kapı
-                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-5">
+                  <div>
+                    <p className="text-[13px] font-semibold text-gray-800 mb-1.5">Vize Danışmanlığı</p>
+                    <p className="text-[12.5px] font-semibold text-gray-600 leading-relaxed">
+                      WhatsApp: <a href="https://wa.me/905385892549" className="hover:text-[#f04420] transition-colors">+90 (538) 589 25 49</a><br />
+                      Telefon: <a href="tel:+905319428965" className="hover:text-[#f04420] transition-colors">+90 (531) 942 89 65</a><br />
+                      <a href="mailto:vize@portalyurtdisi.com" className="text-[#f04420] hover:underline">vize@portalyurtdisi.com</a>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-gray-800 mb-1.5">Yurtdışı Eğitim Danışmanlığı</p>
+                    <p className="text-[12.5px] font-semibold text-gray-600 leading-relaxed">
+                      Arama &amp; WhatsApp: <a href="https://wa.me/905451599761" className="hover:text-[#f04420] transition-colors">+90 (545) 159 97 61</a><br />
+                      <a href="mailto:info@portalyurtdisi.com" className="text-[#f04420] hover:underline">info@portalyurtdisi.com</a>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-gray-800 mb-1.5">İşbirlikleri için</p>
+                    <p className="text-[12.5px] font-semibold text-gray-600 leading-relaxed">
+                      <a href="mailto:partners@portalyurtdisi.com" className="text-[#f04420] hover:underline">partners@portalyurtdisi.com</a>
+                    </p>
+                  </div>
+                </div>
               </div>
+
+              {/* Tagline */}
+             
 
               {/* Logo */}
               <Link href="/">
@@ -194,7 +219,7 @@ export default function Footer() {
                 </a>
                 <p className="text-[12px] text-gray-500 leading-relaxed">
                   Bu proje{' '}
-                  <a href="https://defyzer.com" target="_blank" rel="noopener noreferrer" className="font-bold text-gray-700 hover:text-gray-900 transition-colors">Defyzer</a>
+                  <a href="https://defyzer.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-700 hover:text-gray-900 transition-colors">Defyzer</a>
                   {' '}tarafından geliştirilmiş<br />ve yönetilmektedir.
                 </p>
               </div>
@@ -205,44 +230,47 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Right: OFİS + MAİL + TELEFON + arrow */}
+            {/* Right: Ofisler + İletişim + Telefon */}
             <div className="grid grid-cols-2 gap-x-6 lg:gap-x-12 gap-y-0 pb-10">
 
-              {/* OFİS */}
+              {/* TÜRKİYE OFİSLERİMİZ */}
               <div className="pb-8">
-                <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">OFİS</p>
+                <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">Türkiye Ofislerimiz</p>
                 <div className="relative h-px bg-gray-300 mb-4">
                   <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
                 </div>
-                <p className="text-[13px] text-gray-600 leading-relaxed mb-4">
-                  Даурская Дом 20, Помощение 1,<br />Казань, Татарстан
+                <p className="text-[13px] font-semibold text-gray-600 leading-relaxed mb-4">
+                  <span className="block font-semibold text-gray-800 mb-0.5">İstanbul Ofisi I</span>
+                  Ncadde Ottoman Residence B Blok, 3. Kat, No: 210 Esenyurt, İstanbul / Türkiye
                 </p>
-                <p className="text-[13px] text-gray-600 leading-relaxed">
-                  Pazarcami Mah. Pazar Sok. No 68<br />Nizip, Gaziantep
+                <p className="text-[13px] font-semibold text-gray-600 leading-relaxed">
+                  <span className="block font-semibold text-gray-800 mb-0.5">İstanbul Ofisi II</span>
+                  Uğurlu Plaza Yakuplu Mahallesi, 63. Sokak No: 19, Dükkan 4 Beylikdüzü, İstanbul / Türkiye
                 </p>
               </div>
 
-              {/* MAİL */}
+              {/* YURTDIŞI OFİSİMİZ */}
               <div className="pb-8">
-                <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">MAİL</p>
+                <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">Yurtdışı Ofisimiz</p>
                 <div className="relative h-px bg-gray-300 mb-4">
                   <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
                 </div>
-                <a href="mailto:info@rusyadaokuyorum.com" className="text-[13px] text-[#f04420] hover:underline break-all">
-                  info@rusyadaokuyorum.com
-                </a>
+                <p className="text-[13px] font-semibold text-gray-600 leading-relaxed">
+                  <span className="block font-semibold text-gray-800 mb-0.5">Kazan Ofisi</span>
+                  ул. Спартаковская, д. 2 БЦ «Караван», Ana Giriş 3. Kat, Ofis 303 Kazan, Rusya Federasyonu
+                </p>
               </div>
 
               {/* TELEFON */}
               <div className="col-span-2">
-                <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">TELEFON</p>
+                <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">Telefon</p>
                 <div className="relative h-px bg-gray-300 mb-4">
                   <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
                 </div>
                 <div className="flex items-end justify-between">
-                  <p className="text-[1.4rem] lg:text-[2rem] font-bold text-gray-900 leading-tight tracking-tight">
+                  <a href="tel:+79178899457" className="text-[1.4rem] lg:text-[2rem] font-semibold text-gray-900 leading-tight tracking-tight hover:text-[#f04420] transition-colors">
                     +7 (917) 889-94-57
-                  </p>
+                  </a>
                   <button
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     className="text-[#f04420] hover:opacity-70 transition-opacity mb-1"

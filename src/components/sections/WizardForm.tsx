@@ -124,7 +124,7 @@ export default function WizardForm() {
 
   return (
     <section className="bg-[#ececee] py-12 lg:py-16">
-      <div className="max-w-[1320px] mx-auto px-34">
+      <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
         <div className="bg-white border border-gray-100 rounded-[24px] shadow-[0_15px_45px_-15px_rgba(0,0,0,0.12)] p-6 sm:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-8 lg:gap-12">
 

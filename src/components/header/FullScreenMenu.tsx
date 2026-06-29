@@ -97,7 +97,7 @@ export default function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps)
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[100] bg-neutral-950 grid grid-cols-[65fr_35fr]"
+      className="fixed inset-0 z-[100] bg-neutral-950 flex flex-col overflow-y-auto lg:grid lg:grid-cols-[65fr_35fr] lg:overflow-hidden"
       style={{ visibility: 'hidden' }}
     >
       {/* Close butonu */}
@@ -105,13 +105,13 @@ export default function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps)
         ref={closeBtnRef}
         onClick={onClose}
         aria-label="Menüyü kapat"
-        className="absolute top-8 right-8 z-10 text-white/60 hover:text-white transition-colors p-2"
+        className="absolute top-6 right-6 lg:top-8 lg:right-8 z-10 text-white/60 hover:text-white transition-colors p-2"
       >
         <X size={28} strokeWidth={1.5} />
       </button>
 
       {/* Sol — Ana navigasyon */}
-      <div className="flex flex-col justify-center px-16 lg:px-24 xl:px-32">
+      <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-24 xl:px-32 pt-24 pb-10 lg:py-0 lg:flex-1">
         <nav>
           {NAV_LINKS.map((link, i) => (
             <div key={link.label} className="overflow-hidden py-1">
@@ -121,7 +121,7 @@ export default function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps)
                 onClick={onClose}
                 onMouseEnter={(e) => handleMouseEnter(e.currentTarget)}
                 onMouseLeave={(e) => handleMouseLeave(e.currentTarget)}
-                className="block text-white text-6xl lg:text-7xl xl:text-8xl font-light tracking-tight leading-none hover:text-orange-500 transition-colors duration-200"
+                className="block text-white text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-light tracking-tight leading-none hover:text-orange-500 transition-colors duration-200"
               >
                 {link.label}
               </a>
@@ -133,7 +133,7 @@ export default function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps)
       {/* Sağ — İletişim & Sosyal */}
       <div
         ref={rightColRef}
-        className="flex flex-col justify-end pb-16 px-12 border-l border-white/10"
+        className="flex flex-col justify-end pb-12 lg:pb-16 px-6 sm:px-10 lg:px-12 border-t lg:border-t-0 lg:border-l border-white/10"
       >
         {/* İletişim bilgileri */}
         <div className="mb-10">

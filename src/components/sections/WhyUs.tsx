@@ -83,17 +83,17 @@ export default function WhyUs() {
 
   return (
     <section ref={rootRef} className="bg-white py-20 lg:py-28">
-      <div className="max-w-[1320px] mx-auto px-34">
+      <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
 
         {/* Üst başlık satırı */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-12">
           {/* Sol — badge + başlık */}
           <div className="lg:max-w-[420px]">
-            <div className="flex items-center gap-2.5 mb-5">
-              <span className="w-3 h-3 bg-[#f04420]" />
-              <span className="text-[12px] font-bold tracking-[0.2em] text-[#1c1c1e] uppercase">
-                Avantajlar
-              </span>
+            <div className="mb-5">
+              <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">Avantajlar</p>
+              <div className="relative h-px bg-gray-300 w-40">
+                <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
+              </div>
             </div>
             <h2 className="text-[clamp(2rem,3.4vw,2.9rem)] font-bold text-[#1c1c1e] leading-[1.1] tracking-tight">
               Neden Portal Yurtdışı&apos;nı Seçmelisiniz?

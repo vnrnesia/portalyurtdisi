@@ -4,11 +4,11 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
 const announcements = [
-  '📢 Ücretsiz Üniversite Uygunluk Analizi',
-  '🇷🇺 Rusya 2026 Başvuruları Açıldı',
-  '🇪🇺 Schengen Multi Vize Başvuruları Devam Ediyor',
-  '🇪🇸 İspanya Dil Okullarında Erken Kayıt İndirimi',
-  '🤝 Portal Partner Network Başvuruları Başladı',
+  'Ücretsiz Üniversite Uygunluk Analizi',
+  'Rusya 2026 Başvuruları Açıldı',
+  'Schengen Multi Vize Başvuruları Devam Ediyor',
+  'İspanya Dil Okullarında Erken Kayıt İndirimi',
+  'Portal Partner Network Başvuruları Başladı',
 ]
 
 export default function AnnouncementTicker() {

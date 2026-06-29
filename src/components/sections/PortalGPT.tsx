@@ -63,7 +63,7 @@ export default function PortalGPT() {
 
   return (
     <section className="bg-[#1c1c1e] py-20 lg:py-28">
-      <div className="max-w-[1320px] mx-auto px-34">
+      <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
           {/* SOL — tanıtım */}

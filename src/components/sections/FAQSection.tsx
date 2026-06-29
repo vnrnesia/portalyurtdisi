@@ -14,6 +14,10 @@ const CONSULTANTS = [
 
 const FAQS = [
   {
+    q: 'Yurtdışı eğitim danışmanlığı nedir?',
+    a: 'Yurtdışı eğitim danışmanlığı; öğrencilerin üniversite başvurusu, kabul alma, vize işlemleri ve konaklama planlaması gibi tüm adımlarda profesyonel destek almasını sağlayan hizmettir. Özellikle Rusya, İspanya ve Polonya gibi destinasyonlarda başvuru süreçleri karmaşık olabildiğinden danışmanlık büyük avantaj sağlar; başvurudan mezuniyete kadar tüm yurtdışı eğitim sürecinizi sizin adınıza yönetiyoruz.',
+  },
+  {
     q: 'Yurtdışında üniversite okumak için sınav şart mı?',
     a: 'Hayır. Rusya, Belarus, Kazakistan, Özbekistan ve Azerbaycan gibi birçok ülkede sınavsız lisans ve yüksek lisans programları bulunmaktadır. Program şartları ülke ve üniversiteye göre değişiklik gösterebilir.',
   },
@@ -26,24 +30,20 @@ const FAQS = [
     a: 'Evet. Rusya\'daki birçok üniversite hem Rusça hem de İngilizce müfredatlı programlar sunmaktadır. Ayrıca kayıt öncesi 1 yıllık hazırlık programlarına katılarak dil yeterliliğini kazanabilirsin.',
   },
   {
-    q: 'Vize sürecinde destek sağlıyor musunuz?',
-    a: 'Evet, davet mektubundan vize başvurusuna kadar tüm süreci sizin adınıza takip ediyoruz. %100 vize başarı oranımızla bugüne kadar hiçbir öğrencimiz vizesiz kalmadı.',
+    q: 'Hangi ülkelerde YKS şartsız üniversite okunabilir?',
+    a: 'Birçok ülkede Türkiye\'deki gibi merkezi sınav (YKS) şartı yoktur. Özellikle Rusya, Polonya, Macaristan ve İspanya gibi ülkelerde YKS şartı olmadan üniversite başvurusu yapmak mümkündür.',
   },
   {
-    q: 'Başvuru süreci ne kadar sürer?',
-    a: 'Belgelerin tamamlanmasından itibaren ortalama 4–6 hafta içinde kabul mektubunuz hazır olur. Vize süreci de dahil olmak üzere toplam süre genellikle 8–12 haftadır.',
+    q: 'Schengen ülkelerinde öğrenci vizesi almak zor mu?',
+    a: 'Schengen öğrenci vizesi, doğru ve eksiksiz evraklarla başvuru yapıldığında zor bir süreç değildir. Ancak finansal yeterlilik, eğitim planı ve ülkeye geri dönüş niyeti net biçimde ortaya konmazsa reddedilme riski artabilir.',
   },
   {
-    q: 'Konaklama konusunda yardımcı oluyor musunuz?',
-    a: 'Evet. Partner üniversitelerimizin yurt imkânlarını koordine edebilir ya da tercih ettiğiniz şehirde güvenli daire kiralama sürecinde destek sağlayabiliriz.',
+    q: 'Vize reddi almadan yurtdışı eğitime nasıl başvurabilirim?',
+    a: 'Profesyonel danışmanlıkla hazırlanan başvurularda evrak hataları, yanlış finansal sunum ve eksik dosya gibi riskler en aza indirilir. Bu da vize reddi ihtimalini ciddi şekilde düşürür.',
   },
   {
-    q: 'Rusya\'da Türk öğrenciler için topluluklar var mı?',
-    a: 'Kesinlikle. Moskova, Sankt-Peterburg ve Kazan başta olmak üzere Rusya\'nın tüm büyük şehirlerinde aktif Türk öğrenci toplulukları bulunmaktadır.',
-  },
-  {
-    q: 'Danışmanlık hizmetleri ücretli mi?',
-    a: 'Hayır. Üniversite seçimi, başvuru ve vize süreçlerindeki danışmanlık hizmetimiz tamamen ücretsizdir. Gelirlerimizi partner üniversitelerimizden sağlamaktayız.',
+    q: 'Rusya\'da YKS\'ye girmeden hangi bölümlerde üniversite okuyabilirim?',
+    a: 'Rusya\'da üniversite eğitimi için YKS şartı aranmaz; öğrenciler lise diplomasıyla doğrudan başvuru yapabilir. Tıp, diş hekimliği, eczacılık, mühendislik (bilgisayar, makine, elektrik-elektronik vb.), işletme ve ekonomi, uluslararası ilişkiler, bilişim ve yazılım teknolojileri ile sosyal bilimler ve psikoloji gibi bölümlerde sınavsız kabul yaygındır. Birçok üniversite, hazırlık yılı (foundation year) üzerinden öğrenci kabul ederek doğrudan eğitime başlama imkânı sunar.',
   },
 ]
 
@@ -84,32 +84,45 @@ function AccordionItem({ faq, isOpen, onToggle }: { faq: { q: string; a: string 
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
-  const flipRef = useRef<HTMLDivElement>(null)
-  const imgRef = useRef<HTMLImageElement>(null)
+  const [active, setActive] = useState(0)
+  const dirRef = useRef(1)
+  const frontRef = useRef<HTMLImageElement>(null)
+  const backRef = useRef<HTMLImageElement>(null)
   const nameRef = useRef<HTMLSpanElement>(null)
-  const idxRef = useRef(0)
+  const mounted = useRef(false)
+  const n = CONSULTANTS.length
 
-  // Danışman 4 sn'de bir kendi etrafında dönerek değişir; isim mask animasyonu ile geçer
+  const go = (dir: number) => {
+    dirRef.current = dir
+    setActive((p) => (p + dir + n) % n)
+  }
+
+  // 5 sn'de bir sağdaki danışmana geç (loop). Manuel tıklamada sayaç sıfırlanır.
   useEffect(() => {
-    const id = setInterval(() => {
-      const next = (idxRef.current + 1) % CONSULTANTS.length
-      const c = CONSULTANTS[next]
-      idxRef.current = next
+    const t = setTimeout(() => go(1), 5000)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active])
 
-      // Foto — 3D flip (kendi etrafında döner, kenara gelince görsel değişir)
-      gsap.timeline()
-        .to(flipRef.current, { rotateY: 90, duration: 0.34, ease: 'power2.in' })
-        .add(() => { if (imgRef.current) imgRef.current.src = c.photo })
-        .fromTo(flipRef.current, { rotateY: -90 }, { rotateY: 0, duration: 0.42, ease: 'power2.out' })
+  // Yön duyarlı kaydırma animasyonu
+  useEffect(() => {
+    const dir = dirRef.current
+    if (!mounted.current) { mounted.current = true; return }
 
-      // İsim — mask animasyonu (eski yukarı çıkar, yeni alttan girer)
-      gsap.timeline()
-        .to(nameRef.current, { yPercent: -120, duration: 0.3, ease: 'power2.in' })
-        .add(() => { if (nameRef.current) nameRef.current.textContent = c.name })
-        .fromTo(nameRef.current, { yPercent: 120 }, { yPercent: 0, duration: 0.45, ease: 'power3.out' })
-    }, 4000)
-    return () => clearInterval(id)
-  }, [])
+    if (frontRef.current && backRef.current) {
+      gsap.set(frontRef.current, { xPercent: dir * 100 })
+      gsap.set(backRef.current, { xPercent: 0 })
+      gsap.to(frontRef.current, { xPercent: 0, duration: 0.55, ease: 'power3.out' })
+      gsap.to(backRef.current, { xPercent: -dir * 100, duration: 0.55, ease: 'power3.out' })
+    }
+    if (nameRef.current) {
+      gsap.fromTo(nameRef.current, { xPercent: dir * 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.5, ease: 'power3.out' })
+    }
+  }, [active])
+
+  const prevIdx = (active - 1 + n) % n
+  const nextIdx = (active + 1) % n
+  const backIdx = (active - dirRef.current + n) % n
 
   return (
     <section className="bg-[#f9f9f7] py-20 lg:py-28">
@@ -146,25 +159,51 @@ export default function FAQSection() {
               <p className="text-gray-500 text-[13px] leading-relaxed mb-6">
                 Uzman danışmanlarımızdan ücretsiz bir ön görüşme planlayıp<br />yurtdışı hayalin için ilk adımı atabilirsin
               </p>
-              <div className="flex items-center gap-4">
-                {/* Photo — 4 sn'de bir kendi etrafında dönerek değişir */}
-                <div className="w-14 h-14 rounded-xl bg-gray-200 shrink-0 overflow-hidden" style={{ perspective: 800 }}>
-                  <div ref={flipRef} className="w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+              <div className="flex items-center gap-5">
+                {/* Foto coverflow — yanlar küçük & soluk, orta büyük; yön duyarlı slide */}
+                <div className="flex items-center gap-2 shrink-0">
+                  {/* Sol (önceki) */}
+                  <button
+                    type="button"
+                    onClick={() => go(-1)}
+                    aria-label={CONSULTANTS[prevIdx].name}
+                    className="w-9 h-9 rounded-lg overflow-hidden bg-gray-200 opacity-40 hover:opacity-75 transition-opacity"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={CONSULTANTS[prevIdx].photo} alt="" className="w-full h-full object-cover" />
+                  </button>
+
+                  {/* Orta (aktif) — iki katmanlı slide */}
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-200 ring-2 ring-[#f04420]/25">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img ref={backRef} src={CONSULTANTS[backIdx].photo} alt="" className="absolute inset-0 w-full h-full object-cover" />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      ref={imgRef}
-                      src={CONSULTANTS[0].photo}
-                      alt="Danışman"
-                      className="w-full h-full object-cover"
+                      ref={frontRef}
+                      src={CONSULTANTS[active].photo}
+                      alt={CONSULTANTS[active].name}
+                      className="absolute inset-0 w-full h-full object-cover"
                       onError={e => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
                     />
                   </div>
+
+                  {/* Sağ (sonraki) */}
+                  <button
+                    type="button"
+                    onClick={() => go(1)}
+                    aria-label={CONSULTANTS[nextIdx].name}
+                    className="w-9 h-9 rounded-lg overflow-hidden bg-gray-200 opacity-40 hover:opacity-75 transition-opacity"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={CONSULTANTS[nextIdx].photo} alt="" className="w-full h-full object-cover" />
+                  </button>
                 </div>
+
                 <div className="flex-1 min-w-0">
                   {/* İsim — mask animasyonu için overflow-hidden sarmalayıcı */}
                   <span className="block overflow-hidden h-[19px]">
                     <span ref={nameRef} className="block text-[14px] font-bold text-gray-900 leading-[19px] will-change-transform">
-                      {CONSULTANTS[0].name}
+                      {CONSULTANTS[active].name}
                     </span>
                   </span>
                   <p className="text-[12px] text-gray-400">Öğrenci Danışmanı</p>

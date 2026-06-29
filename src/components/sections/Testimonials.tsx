@@ -107,7 +107,7 @@ export default function Testimonials() {
   }
 
   return (
-    <section className="bg-white pt-20 pb-32 lg:pt-28 lg:pb-40">
+    <section className="bg-white py-20 lg:py-28">
 
       {/* Header */}
       <Container className="px-8 lg:px-16 mb-10 lg:mb-14">

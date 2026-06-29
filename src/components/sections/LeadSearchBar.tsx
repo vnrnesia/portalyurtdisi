@@ -29,7 +29,7 @@ export default function LeadSearchBar() {
 
   return (
     <div className="relative z-20 -mt-20 lg:-mt-24">
-      <div className="max-w-[1320px] mx-auto px-34">
+      <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
         <div className="bg-white rounded-2xl shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] p-6 lg:p-8">
           <p className="text-[16px] font-bold text-[#1c1c1e] mb-4">
             Özel İndirim Fırsatlarından Yararlan

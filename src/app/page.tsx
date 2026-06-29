@@ -9,8 +9,6 @@ import Testimonials from '@/components/sections/Testimonials'
 import ProcessSteps from '@/components/sections/ProcessSteps'
 import PortalGPT from '@/components/sections/PortalGPT'
 import PopularCities from '@/components/sections/PopularCities'
-import ContactFormSection from '@/components/sections/ContactFormSection'
-import LatestBlogPosts from '@/components/sections/LatestBlogPosts'
 import FAQSection from '@/components/sections/FAQSection'
 import CTABanner from '@/components/sections/CTABanner'
 import Footer from '@/components/Footer'
@@ -30,8 +28,6 @@ export default function Home() {
         <ProcessSteps />
         <PortalGPT />
         <PopularCities />
-        <ContactFormSection />
-        <LatestBlogPosts />
         <FAQSection />
         <CTABanner />
       </main>

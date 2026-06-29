@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import gsap from 'gsap'
 import {
   ArrowLeft,
@@ -31,6 +32,7 @@ interface City {
   desc: string
   forWho: string
   stats: [Stat, Stat]
+  img?: string
 }
 
 const cities: City[] = [
@@ -44,6 +46,7 @@ const cities: City[] = [
       { Icon: Award, value: 'Top 100', label: 'Dünya sıralamasında üniversite' },
       { Icon: TrainFront, value: 'Metropol', label: 'Global kariyer ve iş ağı' },
     ],
+    img: '/cities/moskova.webp',
   },
   {
     country: 'Rusya',
@@ -55,6 +58,7 @@ const cities: City[] = [
       { Icon: Wallet, value: 'Ekonomik', label: 'Uygun üniversite ve yaşam' },
       { Icon: Building2, value: 'Köklü', label: 'Kazan Federal University' },
     ],
+    img: '/cities/kazan.webp',
   },
   {
     country: 'İspanya',
@@ -66,6 +70,7 @@ const cities: City[] = [
       { Icon: Sun, value: 'Ilıman', label: 'İklim ve yaşam kalitesi' },
       { Icon: Languages, value: 'EN / ES', label: 'Eğitim dili seçeneği' },
     ],
+    img: '/cities/madrid.webp',
   },
   {
     country: 'İspanya',
@@ -77,6 +82,7 @@ const cities: City[] = [
       { Icon: Waves, value: 'Deniz kenarı', label: 'Akdeniz şehir yaşamı' },
       { Icon: Briefcase, value: 'Part-time', label: 'Yarı zamanlı iş imkânı' },
     ],
+    img: '/cities/barcelona.webp',
   },
   {
     country: 'Polonya',
@@ -88,6 +94,7 @@ const cities: City[] = [
       { Icon: TrendingUp, value: 'Startup', label: 'Gelişen iş ekosistemi' },
       { Icon: Wallet, value: 'Uygun', label: 'Avrupa’ya göre yaşam maliyeti' },
     ],
+    img: '/cities/varsova.webp',
   },
   {
     country: 'Polonya',
@@ -99,6 +106,7 @@ const cities: City[] = [
       { Icon: Landmark, value: 'Tarihi', label: 'Kültürel zenginlik' },
       { Icon: GraduationCap, value: 'Öğrenci dostu', label: 'Jagiellonian University' },
     ],
+    img: '/cities/krakow.webp',
   },
 ]
 
@@ -123,16 +131,16 @@ export default function PopularCities() {
 
   return (
     <section className="bg-white py-20 lg:py-28">
-      <div className="max-w-[1320px] mx-auto px-34">
+      <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
 
         {/* Başlık satırı */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div className="lg:max-w-[640px]">
-            <div className="flex items-center gap-2.5 mb-4">
-              <span className="w-3.5 h-3.5 bg-[#f04420]" />
-              <span className="text-[13px] font-bold tracking-[0.18em] text-[#1c1c1e] uppercase">
-                Popüler Şehirler
-              </span>
+            <div className="mb-4">
+              <p className="text-[10px] font-semibold tracking-[0.22em] uppercase text-gray-500 mb-2">Popüler Şehirler</p>
+              <div className="relative h-px bg-gray-300 w-40">
+                <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
+              </div>
             </div>
             <h2 className="text-[clamp(2.1rem,4vw,3.4rem)] font-bold text-[#1c1c1e] leading-[1.05] tracking-tight">
               Geleceğin için doğru şehri seç
@@ -147,17 +155,29 @@ export default function PopularCities() {
         {/* Izgara — sol kart + sağ panel/istatistikler */}
         <div className="grid lg:grid-cols-2 gap-5 items-stretch">
 
-          {/* SOL — gradient şehir kartı */}
+          {/* SOL — şehir kartı (fotoğraf varsa fotoğraf, yoksa gradient) */}
           <div
             ref={leftRef}
             className="relative min-h-[380px] lg:min-h-0 flex items-center justify-center overflow-hidden"
-            style={{ background: cardGradient }}
+            style={c.img ? undefined : { background: cardGradient }}
           >
-            <span className="absolute top-6 left-6 inline-flex items-center gap-2 text-[13px] font-semibold text-white/80">
+            {c.img && (
+              <>
+                <Image
+                  src={c.img}
+                  alt={c.city}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 660px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
+              </>
+            )}
+            <span className="absolute top-6 left-6 inline-flex items-center gap-2 text-[13px] font-semibold text-white/80 z-10">
               <span className="text-[16px]">{c.flag}</span>
               {c.country}
             </span>
-            <span className="text-white font-bold tracking-tight text-[clamp(2.6rem,4.5vw,4rem)]">
+            <span className="relative z-10 text-white font-bold tracking-tight text-[clamp(2.6rem,4.5vw,4rem)] drop-shadow-lg">
               {c.city}
             </span>
           </div>

@@ -56,7 +56,7 @@ export default function Header() {
         </div>
 
         {/* Mobil hamburger — üst barın sağına overlay olarak yerleştirilir */}
-        <div className="lg:hidden absolute top-0 right-0 h-14 flex items-center pr-4">
+        <div className="lg:hidden absolute top-[3px] right-0 h-[68px] flex items-center pr-5 sm:pr-8">
           <button
             onClick={() => setFullMenuOpen((p) => !p)}
             aria-label={fullMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}

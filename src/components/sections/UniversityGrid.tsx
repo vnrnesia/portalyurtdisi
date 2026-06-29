@@ -5,7 +5,6 @@ import React from 'react'
 import gsap from 'gsap'
 import Link from 'next/link'
 import { Plus, X, Calendar, Users } from 'lucide-react'
-import Container from '@/components/ui/Container'
 
 function LogoImg({ src, alt, hovered }: { src: string; alt: string; hovered: boolean }) {
   return (
@@ -127,7 +126,7 @@ function StatsTicker() {
   const items = [...STATS, ...STATS]
 
   return (
-    <Container>
+    <div className="max-w-[1320px] mx-auto px-4 lg:px-34">
       <div className="border-y border-gray-100 flex h-[42px]">
         <div className="flex-shrink-0 flex items-center gap-2 px-5 border-r border-gray-100 bg-white">
           <span className="hidden lg:inline text-orange-500 text-sm">✳</span>
@@ -158,7 +157,7 @@ function StatsTicker() {
           </div>
         </div>
       </div>
-    </Container>
+    </div>
   )
 }
 
@@ -249,8 +248,9 @@ export default function UniversityGrid() {
     const cellW = eRect.width
     const cellH = eRect.height
 
-    const targetW = cellW * 2 + 1
-    const targetH = cellH * 2 + 1
+    const GAP = 4
+    const targetW = cellW * 2 + GAP
+    const targetH = cellH * 2 + GAP
 
     const clampX = Math.min(Math.max(relX, 0), cRect.width  - targetW)
     const clampY = Math.min(Math.max(relY, 0), cRect.height - targetH)
@@ -418,12 +418,12 @@ export default function UniversityGrid() {
   }, [handleExpand, handleMobileExpand])
 
   return (
-    <section className="bg-white mt-16 py-16 lg:py-24">
+    <section className="bg-white pt-4 pb-16 lg:pt-6 lg:pb-24">
       <StatsTicker />
       <div ref={kfuTriggerRef} />
 
       {/* Mobile: interactive logo grid */}
-      <Container className="lg:hidden mt-8">
+      <div className="max-w-[1320px] mx-auto px-4 lg:px-34 lg:hidden mt-8">
         <div className="bg-gray-100 p-1 rounded-xl overflow-hidden">
           {/* Info card */}
           <div className="bg-gray-50 p-5 rounded-xl mb-1">
@@ -510,10 +510,10 @@ export default function UniversityGrid() {
             )}
           </div>
         </div>
-      </Container>
+      </div>
 
       {/* Desktop: full interactive grid */}
-      <Container className="hidden lg:block overflow-hidden">
+      <div className="max-w-[1320px] mx-auto px-4 lg:px-34 hidden lg:block overflow-hidden">
         <div
           ref={containerRef}
           className="relative grid bg-gray-100 p-1 rounded-xl"
@@ -563,7 +563,7 @@ export default function UniversityGrid() {
             {selectedUni && (
               <div
                 ref={contentRef}
-                className="w-full h-full flex flex-col p-6 text-white relative overflow-hidden"
+                className="w-full h-full flex flex-col p-5 text-white relative overflow-hidden"
                 style={{
                   backgroundColor: selectedUni.accent,
                   backgroundImage: `url(${selectedUni.photo})`,
@@ -589,18 +589,18 @@ export default function UniversityGrid() {
                 </div>
 
                 <div className="mt-auto relative z-10">
-                  <p className="text-[3.5rem] font-extralight leading-none tabular-nums">
+                  <p className="text-[2.4rem] font-extralight leading-none tabular-nums whitespace-nowrap">
                     #{selectedUni.ranking}
                   </p>
-                  <p className="text-[11px] opacity-50 mt-0.5 uppercase tracking-wider">Dünya Sıralaması</p>
+                  <p className="text-[10px] opacity-50 mt-0.5 uppercase tracking-wider">Dünya Sıralaması</p>
                 </div>
 
-                <div className="mt-3 relative z-10">
-                  <h3 className="text-base font-semibold leading-snug">{selectedUni.name}</h3>
-                  <p className="text-[13px] opacity-65 mt-1 leading-relaxed">{selectedUni.description}</p>
+                <div className="mt-2.5 relative z-10">
+                  <h3 className="text-[14px] font-semibold leading-snug">{selectedUni.name}</h3>
+                  <p className="text-[12px] opacity-65 mt-1 leading-snug line-clamp-2">{selectedUni.description}</p>
                 </div>
 
-                <div className="flex items-center gap-4 mt-4 pt-3 border-t border-white/20 text-[11px] relative z-10">
+                <div className="flex items-center gap-3 mt-3 pt-2.5 border-t border-white/20 text-[11px] relative z-10">
                   <span className="flex items-center gap-1 opacity-60">
                     <Calendar size={10} /> {selectedUni.founded}
                   </span>
@@ -625,7 +625,7 @@ export default function UniversityGrid() {
             />
           )}
         </div>
-      </Container>
+      </div>
     </section>
   )
 }

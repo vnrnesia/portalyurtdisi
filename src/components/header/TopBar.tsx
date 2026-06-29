@@ -24,7 +24,7 @@ const languages = [
 export default function TopBar() {
   return (
     <div className="bg-[#1c1c1e]">
-      <div className="max-w-[1320px] mx-auto px-34 h-[68px] flex items-center justify-between gap-6">
+      <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34 h-[68px] flex items-center justify-between gap-6">
 
         {/* Sol grup: logo + nav */}
         <div className="flex items-center gap-9">

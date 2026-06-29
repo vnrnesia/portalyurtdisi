@@ -52,7 +52,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative max-w-[1320px] mx-auto px-34 py-24 lg:py-32">
+      <div className="relative max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34 py-20 lg:py-32">
         <div className="max-w-[760px]">
           <h1
             data-hero-anim
