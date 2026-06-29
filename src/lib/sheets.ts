@@ -36,8 +36,26 @@ export async function postToSheet(payload: SheetPayload): Promise<void> {
     signal: AbortSignal.timeout(15000),
   })
 
+  const text = await res.text().catch(() => '')
+
   if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    throw new Error(`Sheets webhook hatası (${res.status}): ${text.slice(0, 200)}`)
+    throw new Error(`Sheets webhook HTTP ${res.status}: ${text.slice(0, 200)}`)
+  }
+
+  // Apps Script mantıksal hatada bile HTTP 200 + HTML döndürebilir
+  // (ör. dağıtım "Herkes"e açık değilse Google bir oturum/hata sayfasına yönlendirir).
+  // Bu yüzden gövdeyi JSON olarak doğrulayıp { ok: true } bekliyoruz.
+  let parsed: { ok?: boolean; error?: string }
+  try {
+    parsed = JSON.parse(text)
+  } catch {
+    throw new Error(
+      'Sheets webhook JSON yerine HTML döndürdü — dağıtım erişimi büyük olasılıkla "Herkes" değil ya da URL hatalı. ' +
+        text.slice(0, 120)
+    )
+  }
+
+  if (!parsed.ok) {
+    throw new Error(`Sheets webhook reddetti: ${parsed.error || 'bilinmeyen hata (secret uyuşmuyor olabilir)'}`)
   }
 }

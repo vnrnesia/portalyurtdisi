@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import RevealText from '@/components/anim/RevealText'
 import {
   GraduationCap,
@@ -57,12 +57,24 @@ export default function PortalGPT() {
   const [sending, setSending] = useState(false)
   const [firstPrompt, setFirstPrompt] = useState('')
 
+  // Her sohbet için kalıcı oturum kimliği (Sheets'te tek satırda toplanır)
+  const sessionIdRef = useRef('')
+  const ensureSession = () => {
+    if (!sessionIdRef.current) {
+      sessionIdRef.current =
+        typeof crypto !== 'undefined' && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `s_${Date.now()}_${Math.random().toString(36).slice(2)}`
+    }
+    return sessionIdRef.current
+  }
+
   // Tek noktadan AI çağrısı — hem ilk analiz hem takip soruları için
   const send = async (text: string, currentHistory: ChatMsg[]) => {
     const res = await fetch('/api/portalgpt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: text, history: currentHistory }),
+      body: JSON.stringify({ prompt: text, history: currentHistory, sessionId: ensureSession() }),
     })
     const data = await res.json()
     if (!res.ok) throw new Error(data?.error || 'Bir hata oluştu.')
@@ -123,6 +135,8 @@ export default function PortalGPT() {
         body: JSON.stringify({
           ad: 'Portal GPT Talebi',
           telefon: contact,
+          kaynak: 'PortalGPT',
+          sessionId: ensureSession(),
           mesaj: `İlk girdi: ${firstPrompt}\n\nSon öneriler:\n${summary || '—'}`,
         }),
       })
@@ -148,6 +162,7 @@ export default function PortalGPT() {
     setHistory([])
     setFirstPrompt('')
     setError('')
+    sessionIdRef.current = '' // yeni sohbet = yeni oturum satırı
   }
 
   return (

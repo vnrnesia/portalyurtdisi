@@ -6,15 +6,32 @@ import RevealText from '@/components/anim/RevealText'
 import Reveal from '@/components/anim/Reveal'
 
 export default function CTABanner() {
+  const sectionRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(true)
 
   useEffect(() => {
     const v = videoRef.current
-    if (!v) return
+    const sec = sectionRef.current
+    if (!v || !sec) return
+    
     v.muted = true
-    v.play().then(() => setPlaying(true)).catch(() => {})
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          v.play().then(() => setPlaying(true)).catch(() => {})
+        } else {
+          v.pause()
+          setPlaying(false)
+        }
+      },
+      { rootMargin: '400px', threshold: 0 }
+    )
+
+    observer.observe(sec)
+    return () => observer.disconnect()
   }, [])
 
   const togglePlay = () => {
@@ -34,7 +51,7 @@ export default function CTABanner() {
   }
 
   return (
-    <section className="relative bg-white overflow-hidden py-10 lg:py-16 px-4 sm:px-8 min-h-screen flex items-center">
+    <section ref={sectionRef} className="relative bg-white overflow-hidden py-10 lg:py-16 px-4 sm:px-8 min-h-screen flex items-center">
 
       {/* Arka plan ambient glow */}
       <div className="pointer-events-none absolute inset-0">

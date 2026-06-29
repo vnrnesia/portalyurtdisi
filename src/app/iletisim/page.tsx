@@ -24,7 +24,7 @@ export default function IletisimPage() {
       const res = await fetch('/api/iletisim', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, kaynak: 'İletişim Sayfası' }),
       })
       setStatus(res.ok ? 'success' : 'error')
     } catch {

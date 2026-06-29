@@ -50,6 +50,7 @@ export default function ContactFormSection() {
           email: form.email,
           telefon: form.telefon,
           mesaj: '',
+          kaynak: 'İletişim Formu (üst)',
         }),
       })
       setStatus(res.ok ? 'success' : 'error')

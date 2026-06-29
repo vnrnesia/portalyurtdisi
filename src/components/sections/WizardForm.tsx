@@ -98,8 +98,14 @@ export default function WizardForm() {
   const [vizeUlke, setVizeUlke] = useState('')
   const [vizeTur, setVizeTur] = useState('')
   // iletişim
+  const [ad, setAd] = useState('')
+  const [telefon, setTelefon] = useState('')
+  const [email, setEmail] = useState('')
+  const [telegram, setTelegram] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
   const [consent1, setConsent1] = useState(false)
   const [consent2, setConsent2] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
   const stepRef = useRef<HTMLDivElement>(null)
 
@@ -118,9 +124,46 @@ export default function WizardForm() {
   const next = () => setStep((s) => Math.min(s + 1, steps.length - 1))
   const back = () => setStep((s) => Math.max(s - 1, 0))
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // backend bağlanınca burada gönderim yapılacak
+    if (status === 'loading') return
+    setStatus('loading')
+
+    const hizmetLabel = services.find((s) => s.id === service)?.label || service || ''
+
+    // Hizmete göre okunabilir detay özeti
+    const detayParts: string[] = []
+    if (service === 'egitim') {
+      if (ulke) detayParts.push(`Ülke: ${ulke}`)
+      if (durum) detayParts.push(`Eğitim durumu: ${durum}`)
+      if (ing) detayParts.push(`İngilizce: ${ing}`)
+    } else if (service === 'vize') {
+      if (vizeUlke) detayParts.push(`Vize ülkesi: ${vizeUlke}`)
+      if (vizeTur) detayParts.push(`Vize türü: ${vizeTur}`)
+    }
+    if (telegram) detayParts.push(`Telegram: ${telegram}`)
+    if (whatsapp) detayParts.push(`WhatsApp: ${whatsapp}`)
+    detayParts.push(`Onaylar: KVKK ${consent1 ? '✓' : '✗'}, Bilgilendirme ${consent2 ? '✓' : '✗'}`)
+
+    try {
+      const res = await fetch('/api/iletisim', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ad,
+          telefon,
+          email,
+          kaynak: 'Wizard Form',
+          hizmet: hizmetLabel,
+          program: service === 'egitim' ? program : '',
+          butce: service === 'egitim' ? butce : '',
+          detay: detayParts.join(' • '),
+        }),
+      })
+      setStatus(res.ok ? 'success' : 'error')
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -242,23 +285,23 @@ export default function WizardForm() {
                       <div className="grid sm:grid-cols-3 gap-x-4 gap-y-3">
                         <div>
                           <FieldLabel required>Ad Soyad</FieldLabel>
-                          <input type="text" placeholder="Adınız Soyadınız" className={inputCls} required />
+                          <input type="text" placeholder="Adınız Soyadınız" className={inputCls} required value={ad} onChange={(e) => setAd(e.target.value)} />
                         </div>
                         <div>
                           <FieldLabel required>Telefon</FieldLabel>
-                          <input type="tel" placeholder="+90 5xx xxx xx xx" className={inputCls} required />
+                          <input type="tel" placeholder="+90 5xx xxx xx xx" className={inputCls} required value={telefon} onChange={(e) => setTelefon(e.target.value)} />
                         </div>
                         <div>
                           <FieldLabel required>E-posta</FieldLabel>
-                          <input type="email" placeholder="ornek@mail.com" className={inputCls} required />
+                          <input type="email" placeholder="ornek@mail.com" className={inputCls} required value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div>
                           <FieldLabel>Telegram</FieldLabel>
-                          <input type="text" placeholder="@kullanici_adi" className={inputCls} />
+                          <input type="text" placeholder="@kullanici_adi" className={inputCls} value={telegram} onChange={(e) => setTelegram(e.target.value)} />
                         </div>
                         <div>
                           <FieldLabel>WhatsApp</FieldLabel>
-                          <input type="tel" placeholder="+90 5xx xxx xx xx" className={inputCls} />
+                          <input type="tel" placeholder="+90 5xx xxx xx xx" className={inputCls} value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
                         </div>
                       </div>
 
@@ -319,13 +362,29 @@ export default function WizardForm() {
                   ) : (
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#f04420] hover:bg-[#d93a1a] text-white text-[13.5px] font-bold transition-colors"
+                      disabled={status === 'loading' || status === 'success'}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#f04420] hover:bg-[#d93a1a] disabled:opacity-60 text-white text-[13.5px] font-bold transition-colors"
                     >
-                      Ücretsiz Ön Değerlendirme Al
-                      <Send size={15} />
+                      {status === 'loading'
+                        ? 'Gönderiliyor…'
+                        : status === 'success'
+                          ? 'Talebin Alındı ✓'
+                          : 'Ücretsiz Ön Değerlendirme Al'}
+                      {status !== 'loading' && status !== 'success' && <Send size={15} />}
                     </button>
                   )}
                 </div>
+
+                {step === steps.length - 1 && status === 'success' && (
+                  <p className="mt-4 text-[13.5px] font-semibold text-green-600">
+                    Talebin başarıyla alındı! Danışmanımız en kısa sürede seninle iletişime geçecek.
+                  </p>
+                )}
+                {step === steps.length - 1 && status === 'error' && (
+                  <p className="mt-4 text-[13.5px] text-red-500">
+                    Bir hata oluştu, lütfen tekrar deneyin.
+                  </p>
+                )}
               </form>
             </div>
 
@@ -334,7 +393,7 @@ export default function WizardForm() {
               <p className="text-[11px] font-bold tracking-[0.2em] text-gray-400 uppercase mb-4">
                 Neler Sunuyoruz
               </p>
-              <ul className="flex flex-col gap-3.5 lg:flex-1 lg:justify-between lg:gap-0 lg:py-1">
+              <ul className="flex flex-col gap-5">
                 {benefits.map((b) => (
                   <li key={b} className="flex items-start gap-2.5">
                     <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-[#f04420]/10 mt-0.5">

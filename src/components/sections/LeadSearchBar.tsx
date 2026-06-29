@@ -19,53 +19,95 @@ function formatTrPhone(value: string): string {
   return '+90 ' + out
 }
 
-export default function LeadSearchBar() {
-  const [phone, setPhone] = useState('')
+type Status = 'idle' | 'loading' | 'success' | 'error'
 
-  const handleSubmit = (e: React.FormEvent) => {
+export default function LeadSearchBar() {
+  const [ad, setAd] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<Status>('idle')
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // backend bağlanınca burada gönderim yapılacak
+    if (status === 'loading') return
+    setStatus('loading')
+    try {
+      const res = await fetch('/api/iletisim', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ad,
+          telefon: phone,
+          email,
+          kaynak: 'Hero Arama',
+        }),
+      })
+      setStatus(res.ok ? 'success' : 'error')
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
     <div className="relative z-20 -mt-12 lg:-mt-24">
       <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
         <div className="bg-white rounded-2xl shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] p-6 lg:p-8">
-          <p className="text-[16px] font-bold text-[#1c1c1e] mb-4">
-            Özel İndirim Fırsatlarından Yararlan
-          </p>
+          {status === 'success' ? (
+            <div className="py-2">
+              <p className="text-[16px] font-bold text-[#1c1c1e]">Talebin alındı! 🎉</p>
+              <p className="text-[14px] text-gray-500 mt-1">
+                En kısa sürede sana özel fırsatlarla dönüş yapacağız.
+              </p>
+            </div>
+          ) : (
+            <>
+              <p className="text-[16px] font-bold text-[#1c1c1e] mb-4">
+                Özel İndirim Fırsatlarından Yararlan
+              </p>
 
-          <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-3">
-            <input
-              type="text"
-              placeholder="Ad Soyad"
-              required
-              className={`${inputCls} flex-1`}
-            />
-            <input
-              type="tel"
-              inputMode="tel"
-              placeholder="+90 5xx xxx xx xx"
-              value={phone}
-              onChange={(e) => setPhone(formatTrPhone(e.target.value))}
-              required
-              className={`${inputCls} flex-1`}
-            />
-            <input
-              type="email"
-              placeholder="ornek@mail.com"
-              required
-              className={`${inputCls} flex-1`}
-            />
+              <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-3">
+                <input
+                  type="text"
+                  placeholder="Ad Soyad"
+                  value={ad}
+                  onChange={(e) => setAd(e.target.value)}
+                  required
+                  className={`${inputCls} flex-1`}
+                />
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  placeholder="+90 5xx xxx xx xx"
+                  value={phone}
+                  onChange={(e) => setPhone(formatTrPhone(e.target.value))}
+                  required
+                  className={`${inputCls} flex-1`}
+                />
+                <input
+                  type="email"
+                  placeholder="ornek@mail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className={`${inputCls} flex-1`}
+                />
 
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#f04420] hover:bg-[#d93a1a] text-white text-[14px] font-bold px-7 py-3 transition-colors whitespace-nowrap"
-            >
-              Fırsatları Yakala
-              <ArrowRight size={17} />
-            </button>
-          </form>
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#f04420] hover:bg-[#d93a1a] disabled:opacity-60 text-white text-[14px] font-bold px-7 py-3 transition-colors whitespace-nowrap"
+                >
+                  {status === 'loading' ? 'Gönderiliyor…' : 'Fırsatları Yakala'}
+                  {status !== 'loading' && <ArrowRight size={17} />}
+                </button>
+              </form>
+              {status === 'error' && (
+                <p className="text-[13px] text-red-500 mt-3">
+                  Bir hata oluştu, lütfen tekrar deneyin.
+                </p>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -54,17 +54,44 @@ const tabs: ServiceTab[] = [
 
 export default function ServiceTabs() {
   const [active, setActive] = useState(0)
+  const [animating, setAnimating] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
+  const dirRef = useRef(1)
 
   useEffect(() => {
     if (panelRef.current) {
+      const d = dirRef.current
       gsap.fromTo(
         panelRef.current,
-        { opacity: 0, y: 18 },
-        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+        { opacity: 0, x: d * 30, y: 0 },
+        { 
+          opacity: 1, 
+          x: 0, 
+          duration: 0.4, 
+          ease: 'power2.out',
+          onComplete: () => setAnimating(false)
+        }
       )
     }
   }, [active])
+
+  const go = async (i: number) => {
+    if (i === active || animating) return
+    setAnimating(true)
+    const d = i > active ? 1 : -1
+    dirRef.current = d
+
+    if (panelRef.current) {
+      await gsap.to(panelRef.current, {
+        opacity: 0,
+        x: -d * 30,
+        duration: 0.25,
+        ease: 'power2.in',
+      })
+    }
+
+    setActive(i)
+  }
 
   const t = tabs[active]
 
@@ -99,7 +126,7 @@ export default function ServiceTabs() {
           {tabs.map((tab, i) => (
             <Reveal key={tab.key} y={16} delay={i * 0.06} className="h-full">
               <button
-                onClick={() => setActive(i)}
+                onClick={() => go(i)}
                 className={cn(
                   'w-full h-full rounded-xl border py-4 px-4 text-[14.5px] font-semibold transition-colors',
                   i === active
