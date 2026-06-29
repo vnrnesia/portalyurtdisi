@@ -1,9 +1,8 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
 import Link from 'next/link'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import RevealText from '@/components/anim/RevealText'
+import Reveal from '@/components/anim/Reveal'
 import {
   GraduationCap,
   ClipboardCheck,
@@ -13,8 +12,6 @@ import {
   Headphones,
   ArrowRight,
 } from 'lucide-react'
-
-gsap.registerPlugin(ScrollTrigger)
 
 interface Feature {
   Icon: React.ElementType
@@ -56,33 +53,8 @@ const features: Feature[] = [
 ]
 
 export default function WhyUs() {
-  const rootRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '[data-why-card]',
-        { opacity: 0, y: 28 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: 'power2.out',
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: rootRef.current,
-            start: 'top top+=70%',
-            toggleActions: 'play none none none',
-          },
-        }
-      )
-    }, rootRef)
-
-    return () => ctx.revert()
-  }, [])
-
   return (
-    <section ref={rootRef} className="bg-white py-20 lg:py-28">
+    <section className="bg-white py-20 lg:py-28">
       <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
 
         {/* Üst başlık satırı */}
@@ -95,9 +67,11 @@ export default function WhyUs() {
                 <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
               </div>
             </div>
-            <h2 className="text-[clamp(2rem,3.4vw,2.9rem)] font-bold text-[#1c1c1e] leading-[1.1] tracking-tight">
-              Neden Portal Yurtdışı&apos;nı Seçmelisiniz?
-            </h2>
+            <RevealText
+              as="h2"
+              className="text-[clamp(2rem,3.4vw,2.9rem)] font-bold text-[#1c1c1e] leading-[1.1] tracking-tight"
+              text={"Neden Portal\nYurtdışı'nı Seçmelisiniz?"}
+            />
           </div>
 
           {/* Orta — açıklama */}
@@ -129,9 +103,10 @@ export default function WhyUs() {
           {features.map((f, i) => {
             const Icon = f.Icon
             return (
-              <div
+              <Reveal
                 key={i}
-                data-why-card
+                y={18}
+                delay={(i % 3) * 0.07}
                 className="border-r border-b border-gray-200 p-8 lg:p-9 flex flex-col min-h-[230px]"
               >
                 <Icon size={26} strokeWidth={1.75} className="text-[#f04420]" />
@@ -141,7 +116,7 @@ export default function WhyUs() {
                     {f.desc}
                   </p>
                 </div>
-              </div>
+              </Reveal>
             )
           })}
         </div>

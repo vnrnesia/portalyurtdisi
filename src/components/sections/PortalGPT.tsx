@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import RevealText from '@/components/anim/RevealText'
 import {
-  Sparkles,
   GraduationCap,
   Globe,
   Wallet,
@@ -15,6 +15,15 @@ import {
 } from 'lucide-react'
 
 type Stage = 'idle' | 'loading' | 'results' | 'done'
+
+interface Recommendation {
+  name: string
+  program: string
+  country: string
+  tuition: string
+  match: number
+  reason: string
+}
 
 const factors = [
   { Icon: GraduationCap, label: 'Akademik hedefleriniz' },
@@ -30,35 +39,115 @@ const quickPrompts = [
   'Dil okulu · İspanya · 4.000$',
 ]
 
-// Mock sonuçlar (backend/AI sonradan eklenecek)
-const mockResults = [
-  { name: 'Kazan Federal Üniversitesi', program: 'Tıp · Rusça', country: 'Rusya', tuition: '~4.500 $/yıl', match: 95 },
-  { name: 'Sechenov Üniversitesi', program: 'Tıp · İngilizce', country: 'Moskova, Rusya', tuition: '~6.000 $/yıl', match: 88 },
-  { name: 'Lublin Tıp Üniversitesi', program: 'Tıp · İngilizce', country: 'Polonya', tuition: '~9.000 $/yıl', match: 81 },
-]
+interface ChatMsg {
+  role: 'user' | 'assistant'
+  content: string
+}
 
 export default function PortalGPT() {
   const [stage, setStage] = useState<Stage>('idle')
   const [prompt, setPrompt] = useState('')
+  const [followUp, setFollowUp] = useState('')
   const [contact, setContact] = useState('')
+  const [aiMessage, setAiMessage] = useState('')
+  const [results, setResults] = useState<Recommendation[]>([])
+  const [history, setHistory] = useState<ChatMsg[]>([])
+  const [error, setError] = useState('')
+  const [thinking, setThinking] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [firstPrompt, setFirstPrompt] = useState('')
 
-  const analyze = () => {
-    if (!prompt.trim()) return
-    setStage('loading')
-    // AI simülasyonu
-    setTimeout(() => setStage('results'), 1500)
+  // Tek noktadan AI çağrısı — hem ilk analiz hem takip soruları için
+  const send = async (text: string, currentHistory: ChatMsg[]) => {
+    const res = await fetch('/api/portalgpt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: text, history: currentHistory }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data?.error || 'Bir hata oluştu.')
+
+    const recs: Recommendation[] = Array.isArray(data.recommendations) ? data.recommendations : []
+    setAiMessage(data.message || '')
+    setResults(recs)
+
+    // Asistan yanıtını geçmişe ekle (öneri adlarıyla birlikte — bağlam korunur)
+    const assistantSummary = [
+      data.message || '',
+      recs.length ? 'Önerilenler: ' + recs.map((r) => `${r.name} (${r.program})`).join(', ') : '',
+    ].filter(Boolean).join(' ')
+    setHistory([...currentHistory, { role: 'user', content: text }, { role: 'assistant', content: assistantSummary }])
   }
 
-  const submitContact = (e: React.FormEvent) => {
+  const analyze = async () => {
+    if (!prompt.trim()) return
+    setError('')
+    setFirstPrompt(prompt)
+    setStage('loading')
+    try {
+      await send(prompt, [])
+      setStage('results')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Bir hata oluştu.')
+      setStage('idle')
+    }
+  }
+
+  const askFollowUp = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!contact.trim()) return
-    setStage('done')
+    if (!followUp.trim() || thinking) return
+    setError('')
+    setThinking(true)
+    try {
+      await send(followUp, history)
+      setFollowUp('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Bir hata oluştu.')
+    } finally {
+      setThinking(false)
+    }
+  }
+
+  const submitContact = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!contact.trim() || sending) return
+    setSending(true)
+    setError('')
+    try {
+      const summary = results
+        .map((r) => `• ${r.name} — ${r.program} (%${r.match})`)
+        .join('\n')
+      const res = await fetch('/api/iletisim', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ad: 'Portal GPT Talebi',
+          telefon: contact,
+          mesaj: `İlk girdi: ${firstPrompt}\n\nSon öneriler:\n${summary || '—'}`,
+        }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data?.error || 'Gönderilemedi.')
+      }
+      setStage('done')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Gönderilemedi.')
+    } finally {
+      setSending(false)
+    }
   }
 
   const reset = () => {
     setStage('idle')
     setPrompt('')
+    setFollowUp('')
     setContact('')
+    setAiMessage('')
+    setResults([])
+    setHistory([])
+    setFirstPrompt('')
+    setError('')
   }
 
   return (
@@ -69,13 +158,16 @@ export default function PortalGPT() {
           {/* SOL — tanıtım */}
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-[#f04420]/15 text-[#f7a58e] px-3.5 py-1.5 mb-6">
-              <Sparkles size={14} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/sadecelogo2.png" alt="" className="w-3.5 h-3.5 object-contain brightness-0 invert" />
               <span className="text-[12px] font-bold tracking-[0.15em] uppercase">Portal GPT</span>
             </div>
 
-            <h2 className="text-[clamp(1.9rem,3vw,2.7rem)] font-bold text-white leading-[1.12] tracking-tight">
-              Nereden Başlayacağınızı Bilmiyor musunuz?
-            </h2>
+            <RevealText
+              as="h2"
+              className="text-[clamp(1.9rem,3vw,2.7rem)] font-bold text-white leading-[1.12] tracking-tight"
+              text={"Nereden Başlayacağınızı\nBilmiyor musunuz?"}
+            />
             <p className="mt-3 text-[15px] font-semibold text-white/80">
               Portal GPT — Kişiye Özel Üniversite Seçim Robotu
             </p>
@@ -100,12 +192,13 @@ export default function PortalGPT() {
           </div>
 
           {/* SAĞ — interaktif panel */}
-          <div className="bg-white rounded-2xl shadow-2xl p-6 lg:p-7">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 lg:p-7 w-full overflow-hidden">
 
             {/* Panel başlığı */}
             <div className="flex items-center gap-2 pb-4 mb-5 border-b border-gray-100">
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#f04420]/10">
-                <Sparkles size={16} className="text-[#f04420]" />
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#f04420]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/sadecelogo2.png" alt="Portal GPT" className="w-5 h-5 object-contain brightness-0 invert" />
               </span>
               <div>
                 <p className="text-[14px] font-bold text-[#1c1c1e] leading-none">Portal GPT</p>
@@ -128,14 +221,14 @@ export default function PortalGPT() {
                   className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-[14px] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#f04420] focus:bg-white transition-colors"
                 />
 
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-2 mt-3">
                   {quickPrompts.map((q) => (
                     <button
                       key={q}
                       type="button"
                       onClick={() => setPrompt(q)}
                       disabled={stage === 'loading'}
-                      className="text-[12px] text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full px-3 py-1.5 transition-colors max-w-full truncate"
+                      className="text-[12.5px] leading-relaxed text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl px-3.5 py-2.5 transition-colors text-left w-full sm:w-auto"
                     >
                       {q}
                     </button>
@@ -155,42 +248,78 @@ export default function PortalGPT() {
                     </>
                   ) : (
                     <>
-                      <Sparkles size={16} />
+                      <img src="/sadecelogo2.png" alt="" className="w-4 h-4 object-contain brightness-0 invert" />
                       Analiz Et
                     </>
                   )}
                 </button>
+
+                {error && (
+                  <p className="mt-3 text-[12.5px] text-red-500 text-center">{error}</p>
+                )}
               </div>
             )}
 
-            {/* results — 3 uyum kartı + iletişim input */}
+            {/* results — kompakt uyum kartları + sohbet + iletişim */}
             {stage === 'results' && (
               <div>
-                <p className="text-[13px] font-semibold text-[#1c1c1e] mb-3">
-                  Senin için en uygun 3 seçenek:
-                </p>
-                <div className="flex flex-col gap-2.5">
-                  {mockResults.map((r) => (
-                    <div key={r.name} className="rounded-xl border border-gray-200 p-3.5">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-[14px] font-bold text-[#1c1c1e] leading-snug">{r.name}</p>
-                          <p className="text-[12.5px] text-gray-500 mt-0.5">
-                            {r.program} · {r.country} · {r.tuition}
-                          </p>
-                        </div>
-                        <span className="text-[14px] font-bold text-[#f04420] flex-shrink-0">%{r.match}</span>
-                      </div>
-                      <div className="mt-2.5 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                        <div className="h-full rounded-full bg-[#f04420]" style={{ width: `${r.match}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                {aiMessage && (
+                  <p className="text-[12.5px] text-gray-600 leading-snug mb-3 bg-gray-50 rounded-lg p-2.5 border border-gray-100">
+                    {aiMessage}
+                  </p>
+                )}
 
-                <form onSubmit={submitContact} className="mt-5 pt-5 border-t border-gray-100">
-                  <p className="text-[13px] font-semibold text-[#1c1c1e] mb-2.5">
-                    Sana özel detaylı yol haritası için iletişim bilgini bırak:
+                {results.length > 0 && (
+                  <div className="flex flex-col gap-2 max-h-[244px] overflow-y-auto pr-1 -mr-1">
+                    {results.map((r, i) => (
+                      <div key={`${r.name}-${i}`} className="rounded-lg border border-gray-200 px-3 py-2.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-[13px] font-bold text-[#1c1c1e] leading-snug truncate">{r.name}</p>
+                          <span className="text-[13px] font-bold text-[#f04420] flex-shrink-0">%{r.match}</span>
+                        </div>
+                        <p className="text-[11.5px] text-gray-500 mt-0.5 truncate">
+                          {[r.program, r.country, r.tuition].filter(Boolean).join(' · ')}
+                        </p>
+                        <div className="mt-2 h-1 rounded-full bg-gray-100 overflow-hidden">
+                          <div className="h-full rounded-full bg-[#f04420]" style={{ width: `${r.match}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Takip sorusu — sohbete devam */}
+                <form onSubmit={askFollowUp} className="mt-3">
+                  <div className="flex gap-2">
+                    <input
+                      value={followUp}
+                      onChange={(e) => setFollowUp(e.target.value)}
+                      disabled={thinking}
+                      placeholder="Tekrar sor: ör. bütçem 3.000$ olsa?"
+                      className="flex-1 rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-2 text-[13px] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#f04420] focus:bg-white transition-colors disabled:opacity-60"
+                    />
+                    <button
+                      type="submit"
+                      disabled={thinking || !followUp.trim()}
+                      className="inline-flex items-center justify-center w-10 bg-[#1c1c1e] hover:bg-black disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                      aria-label="Tekrar sor"
+                    >
+                      {thinking ? (
+                        <Loader2 size={15} className="animate-spin" />
+                      ) : (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src="/sadecelogo2.png" alt="" className="w-4 h-4 object-contain brightness-0 invert" />
+                      )}
+                    </button>
+                  </div>
+                  {thinking && (
+                    <p className="mt-1.5 text-[11.5px] text-gray-400">Portal GPT yazıyor…</p>
+                  )}
+                </form>
+
+                <form onSubmit={submitContact} className="mt-3 pt-3 border-t border-gray-100">
+                  <p className="text-[12px] font-semibold text-[#1c1c1e] mb-2">
+                    Detaylı yol haritası için iletişim bilgini bırak:
                   </p>
                   <div className="flex gap-2">
                     <input
@@ -198,18 +327,19 @@ export default function PortalGPT() {
                       onChange={(e) => setContact(e.target.value)}
                       required
                       placeholder="Telefon veya e-posta"
-                      className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-[14px] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#f04420] focus:bg-white transition-colors"
+                      className="flex-1 rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-[13.5px] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#f04420] focus:bg-white transition-colors"
                     />
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-1.5 bg-[#f04420] hover:bg-[#d93a1a] text-white text-[14px] font-bold rounded-xl px-5 transition-colors whitespace-nowrap"
+                      disabled={sending}
+                      className="inline-flex items-center gap-1.5 bg-[#f04420] hover:bg-[#d93a1a] disabled:opacity-50 disabled:cursor-not-allowed text-white text-[13.5px] font-bold rounded-lg px-4 transition-colors whitespace-nowrap"
                     >
-                      Gönder
-                      <ArrowRight size={16} />
+                      {sending ? <Loader2 size={15} className="animate-spin" /> : <>Gönder<ArrowRight size={15} /></>}
                     </button>
                   </div>
-                  <p className="mt-3 flex items-center gap-1.5 text-[11.5px] text-gray-400">
-                    <Check size={13} className="text-[#f04420]" />
+                  {error && <p className="mt-1.5 text-[12px] text-red-500">{error}</p>}
+                  <p className="mt-2 flex items-center gap-1.5 text-[11px] text-gray-400">
+                    <Check size={12} className="text-[#f04420]" />
                     Sonuçlar danışmanlarımız tarafından doğrulanarak hazırlanır.
                   </p>
                 </form>

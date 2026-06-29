@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import RevealText from '@/components/anim/RevealText'
+import Reveal from '@/components/anim/Reveal'
 
 interface Step {
   short: string
@@ -52,9 +53,11 @@ export default function ProcessSteps() {
 
           {/* SOL — başlık + sosyal kanıt + CTA */}
           <div>
-            <h2 className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold text-[#1c1c1e] leading-[1.12] tracking-tight">
-              Başvurudan Yerleşime Kadar 4 Aşamada Yanınızdayız
-            </h2>
+            <RevealText
+              as="h2"
+              className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold text-[#1c1c1e] leading-[1.12] tracking-tight"
+              text={"Başvurudan Yerleşime Kadar\n4 Aşamada Yanınızdayız"}
+            />
             <p className="mt-4 text-[15px] text-gray-500 leading-relaxed">
               Eğitim, vize ve yerleşim süreçlerinizi tek merkezden yönetiyoruz.
             </p>
@@ -84,7 +87,7 @@ export default function ProcessSteps() {
           </div>
 
           {/* SAĞ — genişleyen panel akordeon (desktop) */}
-          <div className="hidden lg:flex gap-3 h-[480px]">
+          <Reveal y={20} className="hidden lg:flex gap-3 h-[480px]">
             {steps.map((s, i) => {
               const isActive = i === active
               return (
@@ -95,7 +98,8 @@ export default function ProcessSteps() {
                   style={{ flexGrow: isActive ? 6 : 1, flexBasis: 0, minWidth: 0, willChange: 'flex-grow' }}
                 >
                   {/* Sabit arka plan görseli (her durumda mevcut, yeniden yüklenmez) */}
-                  <Image src={s.img} alt={s.title} fill className="object-cover object-top" sizes="600px" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={s.img} alt={s.title} className="absolute inset-0 w-full h-full object-cover object-top" />
 
                   {/* Kapalı durum katmanı — karartma + dikey etiket */}
                   <div
@@ -129,28 +133,30 @@ export default function ProcessSteps() {
                       {s.title}
                     </h3>
                     <div className="relative flex-1 min-h-0 rounded-xl overflow-hidden mb-4">
-                      <Image src={s.img} alt={s.title} fill className="object-cover object-top" sizes="600px" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={s.img} alt={s.title} className="absolute inset-0 w-full h-full object-cover object-top" />
                     </div>
                     <p className="text-[14px] text-gray-600 leading-relaxed">{s.desc}</p>
                   </div>
                 </div>
               )
             })}
-          </div>
+          </Reveal>
 
           {/* SAĞ — mobil dikey kartlar */}
           <div className="lg:hidden flex flex-col gap-4">
             {steps.map((s, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden bg-white border border-gray-100">
+              <Reveal key={i} y={18} delay={i * 0.06} className="rounded-2xl overflow-hidden bg-white border border-gray-100">
                 <div className="relative h-40">
-                  <Image src={s.img} alt={s.title} fill className="object-cover object-top" sizes="100vw" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={s.img} alt={s.title} className="absolute inset-0 w-full h-full object-cover object-top" />
                 </div>
                 <div className="p-5">
                   <p className="text-[12px] font-bold text-[#f04420]">Adım {i + 1}</p>
                   <h3 className="text-[16px] font-bold text-[#1c1c1e] mt-1 mb-2">{s.title}</h3>
                   <p className="text-[13.5px] text-gray-600 leading-relaxed">{s.desc}</p>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
 

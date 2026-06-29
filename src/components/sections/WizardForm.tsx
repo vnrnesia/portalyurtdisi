@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { Check, ChevronLeft, ChevronRight, ChevronDown, Send } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Reveal from '@/components/anim/Reveal'
 
 /* ----------------------------- veri ----------------------------- */
 
@@ -123,9 +124,9 @@ export default function WizardForm() {
   }
 
   return (
-    <section className="bg-[#ececee] py-12 lg:py-16">
+    <section className="bg-gray-100 py-12 lg:py-16">
       <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-34">
-        <div className="bg-white border border-gray-100 rounded-[24px] shadow-[0_15px_45px_-15px_rgba(0,0,0,0.12)] p-6 sm:p-8">
+        <Reveal y={24} className="bg-white border border-gray-100 rounded-[24px] shadow-[0_15px_45px_-15px_rgba(0,0,0,0.12)] p-6 sm:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-8 lg:gap-12">
 
             {/* SOL — form */}
@@ -160,7 +161,7 @@ export default function WizardForm() {
                       </span>
                     </div>
                     {i < steps.length - 1 && (
-                      <div className={cn('h-px flex-1 hidden sm:block', i < step ? 'bg-[#f04420]' : 'bg-gray-200')} />
+                      <div className={cn('h-px flex-1', i < step ? 'bg-[#f04420]' : 'bg-[#f04420]/30')} />
                     )}
                   </div>
                 ))}
@@ -329,11 +330,11 @@ export default function WizardForm() {
             </div>
 
             {/* SAĞ — avantajlar */}
-            <div className="lg:border-l lg:border-gray-200 lg:pl-10">
+            <div className="lg:border-l lg:border-gray-200 lg:pl-10 flex flex-col">
               <p className="text-[11px] font-bold tracking-[0.2em] text-gray-400 uppercase mb-4">
                 Neler Sunuyoruz
               </p>
-              <ul className="flex flex-col gap-3.5">
+              <ul className="flex flex-col gap-3.5 lg:flex-1 lg:justify-between lg:gap-0 lg:py-1">
                 {benefits.map((b) => (
                   <li key={b} className="flex items-start gap-2.5">
                     <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-[#f04420]/10 mt-0.5">
@@ -346,7 +347,7 @@ export default function WizardForm() {
             </div>
 
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   )

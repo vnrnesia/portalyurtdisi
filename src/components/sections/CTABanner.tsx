@@ -2,6 +2,8 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { ArrowRight, Play, Pause, Volume2, VolumeX } from 'lucide-react'
+import RevealText from '@/components/anim/RevealText'
+import Reveal from '@/components/anim/Reveal'
 
 export default function CTABanner() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -39,19 +41,21 @@ export default function CTABanner() {
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full bg-[#f0c9a0]/40 blur-[120px]" />
       </div>
 
-      <div className="relative max-w-3xl mx-auto flex flex-col items-center gap-10">
+      <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center gap-10">
 
         {/* ── Başlık ── */}
-        <h2 className="text-[#f04420] text-center font-light tracking-tight leading-[1.1] text-[clamp(1.6rem,3.5vw,2.8rem)]">
-          Hayallerindeki üniversiteye,<br />seninle ulaşıyoruz.
-        </h2>
+        <RevealText
+          as="h2"
+          className="text-[#f04420] text-center font-light tracking-tight leading-[1.1] text-[clamp(1.6rem,3.5vw,2.8rem)]"
+          text={"Hayallerindeki üniversiteye,\nseninle ulaşıyoruz."}
+        />
 
         {/* ── Ana kart ── */}
-        <div className="w-full max-w-3xl rounded-2xl overflow-hidden border border-white/[0.06] bg-[#161616] flex flex-col lg:flex-row shadow-2xl">
+        <Reveal y={24} delay={0.05} className="w-full rounded-2xl overflow-hidden border border-gray-200 bg-gray-100 flex flex-col lg:flex-row shadow-xl">
 
           {/* Sol — Video */}
           <div
-            className="relative lg:w-[58%] aspect-video bg-black cursor-pointer group"
+            className="relative lg:w-[58%] aspect-video bg-gray-200 cursor-pointer group"
             onClick={togglePlay}
           >
             <video
@@ -59,7 +63,7 @@ export default function CTABanner() {
               src="/recap.mp4"
               loop
               playsInline
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-[center_60%]"
             />
 
             {/* Ses aç/kapat — sağ alt */}
@@ -97,54 +101,54 @@ export default function CTABanner() {
           </div>
 
           {/* Sağ — Metin + Butonlar */}
-          <div className="lg:w-[42%] px-8 py-10 lg:py-12 flex flex-col justify-center gap-7 border-t lg:border-t-0 lg:border-l border-white/[0.06]">
-            <p className="text-white text-[1.35rem] font-medium leading-snug">
+          <div className="lg:w-[42%] px-8 py-10 lg:py-12 flex flex-col justify-center gap-7 border-t lg:border-t-0 lg:border-l bg-white border-gray-200">
+            <p className="text-gray-900 text-[1.35rem] font-medium leading-snug">
               Geleceğine Giden Yolu<br />Birlikte Planlayalım.
             </p>
-            <p className="text-white/55 text-[13px] leading-relaxed -mt-3">
+            <p className="text-gray-500 text-[13px] font-semibold leading-relaxed -mt-3">
               Gerçek deneyimlerle yurtdışı eğitim sürecini tüm detaylarıyla keşfedin.
             </p>
 
             <div className="flex flex-col gap-3">
               <a
                 href="#"
-                className="group/btn flex items-center justify-between gap-4 px-5 py-4 rounded-full bg-[#222]/80 border border-white/10 text-white text-[13px] hover:bg-[#2a2a2a] transition-colors"
+                className="group/btn flex items-center justify-between gap-4 px-5 py-4 rounded-full bg-white border border-gray-200 text-gray-900 text-[13px] hover:bg-gray-50 transition-colors"
               >
-                <span className="text-white/60">
-                  <span className="text-white font-semibold">Telegram</span>{' '}
+                <span className="text-gray-500">
+                  <span className="text-gray-900 font-semibold">Telegram</span>{' '}
                   Güncel Duyurular ve Yardımlaşma Topluluğu
                 </span>
-                <ArrowRight size={15} className="shrink-0 text-white/70" />
+                <ArrowRight size={15} className="shrink-0 text-gray-400" />
               </a>
 
               <a
                 href="#"
-                className="flex items-center justify-between gap-4 px-5 py-4 rounded-full bg-[#222]/80 border border-white/10 text-white text-[13px] hover:bg-[#2a2a2a] transition-colors"
+                className="flex items-center justify-between gap-4 px-5 py-4 rounded-full bg-white border border-gray-200 text-gray-900 text-[13px] hover:bg-gray-50 transition-colors"
               >
-                <span className="text-white/60">
-                  <span className="text-white font-semibold">YouTube</span>{' '}
+                <span className="text-gray-500">
+                  <span className="text-gray-900 font-semibold">YouTube</span>{' '}
                   Gerçek Öğrenci Deneyimi / Süreç
                 </span>
-                <div className="w-7 h-7 rounded-full bg-white/15 border border-white/10 flex items-center justify-center shrink-0">
-                  <Play size={11} className="fill-white text-white ml-0.5" />
+                <div className="w-7 h-7 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center shrink-0">
+                  <Play size={11} className="fill-gray-700 text-gray-700 ml-0.5" />
                 </div>
               </a>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* ── Alt şerit ── */}
-        <div className="w-full max-w-3xl rounded-xl bg-[#161616] border border-white/[0.06] px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/60 text-sm">
+        <Reveal y={20} delay={0.12} className="w-full rounded-xl bg-white border border-gray-200 px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-sm font-semibold">
             Nereden başlayacağınızı bilmiyor musunuz? Uzmanlarımızla ücretsiz ön görüşme planlayın.
           </p>
           <a
             href="#"
-            className="shrink-0 px-5 py-2.5 rounded-full border border-white/20 bg-white/5 text-white text-sm font-medium hover:bg-white hover:text-gray-900 transition-colors whitespace-nowrap"
+            className="shrink-0 px-5 py-2.5 rounded-full border border-gray-300 bg-white text-gray-900 text-sm font-medium hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-colors whitespace-nowrap"
           >
             Hemen Başla
           </a>
-        </div>
+        </Reveal>
 
       </div>
     </section>

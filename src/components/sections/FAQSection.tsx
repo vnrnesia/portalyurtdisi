@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 import { Plus, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import gsap from 'gsap'
+import RevealText from '@/components/anim/RevealText'
+import Reveal from '@/components/anim/Reveal'
 
 const CONSULTANTS = [
   { name: 'Furkan Ercan', photo: '/danismanlar/furkanercan.png' },
@@ -141,9 +143,11 @@ export default function FAQSection() {
               </div>
 
               {/* Heading */}
-              <h2 className="text-[clamp(2.2rem,4vw,3.5rem)] font-bold text-gray-900 leading-tight tracking-tight mb-6">
-                Aklındaki Sorulara<br />Net Yanıtlar
-              </h2>
+              <RevealText
+                as="h2"
+                className="text-[clamp(2.2rem,4vw,3.5rem)] font-bold text-gray-900 leading-tight tracking-tight mb-6"
+                text={"Aklındaki Sorulara\nNet Yanıtlar"}
+              />
 
               {/* Desc */}
               <div className="flex items-start gap-4">
@@ -159,7 +163,7 @@ export default function FAQSection() {
               <p className="text-gray-500 text-[13px] leading-relaxed mb-6">
                 Uzman danışmanlarımızdan ücretsiz bir ön görüşme planlayıp<br />yurtdışı hayalin için ilk adımı atabilirsin
               </p>
-              <div className="flex items-center gap-5">
+              <div className="flex flex-wrap items-center gap-5">
                 {/* Foto coverflow — yanlar küçük & soluk, orta büyük; yön duyarlı slide */}
                 <div className="flex items-center gap-2 shrink-0">
                   {/* Sol (önceki) */}
@@ -221,12 +225,13 @@ export default function FAQSection() {
           {/* ── Right: Accordion ── */}
           <div className="divide-y divide-gray-200">
             {FAQS.map((faq, i) => (
-              <AccordionItem
-                key={i}
-                faq={faq}
-                isOpen={openIndex === i}
-                onToggle={() => setOpenIndex(openIndex === i ? null : i)}
-              />
+              <Reveal key={i} y={14} delay={i * 0.04}>
+                <AccordionItem
+                  faq={faq}
+                  isOpen={openIndex === i}
+                  onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+                />
+              </Reveal>
             ))}
           </div>
 

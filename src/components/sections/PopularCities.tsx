@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import gsap from 'gsap'
+import RevealText from '@/components/anim/RevealText'
+import Reveal from '@/components/anim/Reveal'
 import {
   ArrowLeft,
   ArrowRight,
@@ -115,19 +117,46 @@ const cardGradient =
 
 export default function PopularCities() {
   const [active, setActive] = useState(0)
+  const [animating, setAnimating] = useState(false)
   const leftRef = useRef<HTMLDivElement>(null)
   const rightRef = useRef<HTMLDivElement>(null)
+  const dirRef = useRef(1)
 
   useEffect(() => {
+    const d = dirRef.current
     gsap.fromTo(
       [leftRef.current, rightRef.current],
-      { opacity: 0, y: 14 },
-      { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.06 }
+      { opacity: 0, x: d * 40, y: 0 },
+      { 
+        opacity: 1, 
+        x: 0, 
+        duration: 0.45, 
+        ease: 'power2.out', 
+        stagger: 0.06,
+        onComplete: () => setAnimating(false)
+      }
     )
   }, [active])
 
   const c = cities[active]
-  const go = (d: number) => setActive((p) => (p + d + cities.length) % cities.length)
+
+  const go = async (d: number) => {
+    if (animating) return
+    setAnimating(true)
+    dirRef.current = d
+
+    // Mevcut içeriği kaydırarak gizle
+    await gsap.to([leftRef.current, rightRef.current], {
+      opacity: 0,
+      x: -d * 40,
+      duration: 0.25,
+      ease: 'power2.in',
+      stagger: 0.04
+    })
+
+    // İçeriği güncelle (bu useEffect'i tetikleyecek ve yeni içeriği kaydırarak getirecek)
+    setActive((p) => (p + d + cities.length) % cities.length)
+  }
 
   return (
     <section className="bg-white py-20 lg:py-28">
@@ -142,9 +171,11 @@ export default function PopularCities() {
                 <div className="absolute left-0 top-0 w-8 h-[2px] bg-gray-500 -translate-y-px" />
               </div>
             </div>
-            <h2 className="text-[clamp(2.1rem,4vw,3.4rem)] font-bold text-[#1c1c1e] leading-[1.05] tracking-tight">
-              Geleceğin için doğru şehri seç
-            </h2>
+            <RevealText
+              as="h2"
+              className="text-[clamp(2.1rem,4vw,3.4rem)] font-bold text-[#1c1c1e] leading-[1.05] tracking-tight"
+              text={"Geleceğin için\ndoğru şehri seç"}
+            />
           </div>
           <p className="lg:max-w-[330px] text-[15px] text-gray-500 leading-relaxed">
             Rusya, İspanya ve Polonya’nın öne çıkan öğrenci şehirleri — her biri
@@ -153,7 +184,7 @@ export default function PopularCities() {
         </div>
 
         {/* Izgara — sol kart + sağ panel/istatistikler */}
-        <div className="grid lg:grid-cols-2 gap-5 items-stretch">
+        <Reveal y={22} className="grid lg:grid-cols-2 gap-5 items-stretch">
 
           {/* SOL — şehir kartı (fotoğraf varsa fotoğraf, yoksa gradient) */}
           <div
@@ -218,7 +249,7 @@ export default function PopularCities() {
               })}
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Alt — ileri/geri (kare butonlar) */}
         <div className="flex justify-end gap-2 mt-6">

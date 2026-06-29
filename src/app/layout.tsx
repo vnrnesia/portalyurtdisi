@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import SmoothScroll from "@/components/anim/SmoothScroll";
+import PopupCTA from "@/components/PopupCTA";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -21,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${manrope.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-[family-name:var(--font-manrope)]">
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
+        <FloatingWhatsApp />
+        <PopupCTA />
       </body>
     </html>
   );

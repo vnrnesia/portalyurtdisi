@@ -31,7 +31,7 @@ export default function Hero() {
   return (
     <section
       ref={rootRef}
-      className="relative overflow-hidden bg-[#1c1c1e] rounded-b-[44px]"
+      className="relative overflow-hidden bg-[#1c1c1e] rounded-b-[24px] lg:rounded-b-[44px]"
     >
       {/* Sol üst dekoratif ince çizgiler (grid) — sağa/aşağı doğru sönümlenir */}
       <div className="pointer-events-none absolute inset-0 hidden lg:block">
@@ -40,7 +40,7 @@ export default function Hero() {
       </div>
 
       {/* Sağdaki silik logo watermark — ekranın sağına taşıp ~%20'si kesik */}
-      <div className="pointer-events-none absolute inset-0 hidden lg:block">
+      <div className="pointer-events-none absolute inset-0">
         <Image
           src="/sadecelogo2.png"
           alt=""

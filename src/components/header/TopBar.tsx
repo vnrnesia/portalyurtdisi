@@ -52,7 +52,7 @@ export default function TopBar() {
               </button>
 
               <div
-                className="absolute top-full left-0 pt-3 min-w-[200px]
+                className="absolute top-full left-0 pt-3 min-w-[200px] z-50
                            opacity-0 invisible translate-y-1
                            group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
                            transition-all duration-200 ease-out"
@@ -97,7 +97,7 @@ export default function TopBar() {
             </button>
 
             <div
-              className="absolute top-full right-0 pt-3 min-w-[170px]
+              className="absolute top-full right-0 pt-3 min-w-[170px] z-50
                          opacity-0 invisible translate-y-1
                          group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
                          transition-all duration-200 ease-out"
