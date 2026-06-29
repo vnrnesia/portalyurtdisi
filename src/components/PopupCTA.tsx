@@ -37,10 +37,11 @@ export default function PopupCTA() {
 
         {/* Resim Bölümü */}
         <div className="relative w-full md:w-[45%] h-64 md:h-auto bg-white">
-          <Image 
-            src="/popup.png" 
+          <Image
+            src="/popup.png"
             alt="Yurtdışı Eğitim Hayali"
             fill
+            sizes="(max-width: 768px) 100vw, 45vw"
             className="object-cover md:object-contain object-center p-4"
           />
         </div>

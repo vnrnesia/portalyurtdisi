@@ -32,7 +32,7 @@ export default function NavBar({
           src="/logo.png"
           alt="Portal Yurtdışı"
           width={180}
-          height={48}
+          height={39}
           priority
           className="object-contain"
         />

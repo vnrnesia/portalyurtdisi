@@ -33,7 +33,7 @@ export default function TopBar() {
               src="/logo.png"
               alt="Portal Yurtdışı"
               width={150}
-              height={36}
+              height={32}
               priority
               className="object-contain brightness-0 invert"
             />

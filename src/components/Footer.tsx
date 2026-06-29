@@ -201,7 +201,7 @@ export default function Footer() {
                   src="/logo.png"
                   alt="Portal Yurtdışı"
                   width={320}
-                  height={86}
+                  height={69}
                   className="object-contain object-left"
                 />
               </Link>
