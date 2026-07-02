@@ -15,7 +15,7 @@ const NAV_LINKS = [
 
 const LEGAL_LINKS = [
   { label: 'Kullanım Koşulları', href: '#' },
-  { label: 'Gizlilik Politikası', href: '#' },
+  { label: 'Gizlilik Politikası', href: '/gizlilik-politikasi' },
   { label: 'Sorumluluk Reddi', href: '#' },
   { label: 'KVKK', href: '#' },
 ]
@@ -81,7 +81,7 @@ export default function Footer() {
 
             <p className="text-gray-600 text-[12px] font-extrabold mt-4 leading-relaxed">
               Göndererek{' '}
-              <Link href="#" className="text-[#f04420] hover:underline">KVKK ve Gizlilik Politikamızı</Link>
+              <Link href="/gizlilik-politikasi" className="text-[#f04420] hover:underline">KVKK ve Gizlilik Politikamızı</Link>
               {' '}kabul etmiş olursunuz.
             </p>
             <p className="text-gray-600 text-[12px] font-extrabold mt-1">
